@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirHealth - Air Quality Monitoring</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for dashboard charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Applying the Inter font as the default */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Simple class to hide/show pages */
+        .hidden-page {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <!-- Main Application Container -->
+    <div id="app">
+
+        <!-- Header - Shown on Home and Dashboard -->
+        <header id="main-header" class="bg-white/80 backdrop-blur-sm shadow-sm fixed top-0 left-0 right-0 z-50 hidden-page">
+            <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+                <a href="#" data-page="home" class="flex items-center">
+                    <div class="bg-cyan-400 p-2 rounded-lg">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800 ml-2">AirHealth</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#" data-page="home" class="text-gray-600 hover:text-cyan-500">Home</a>
+                    <a href="#" data-page="dashboard" class="text-gray-600 hover:text-cyan-500">Dashboard</a>
+                    <a href="#" class="text-gray-600 hover:text-cyan-500">About</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#" data-page="signin" class="text-gray-600 hover:text-cyan-500">Sign In</a>
+                    <a href="#" data-page="signup" class="bg-cyan-500 text-white px-4 py-2 rounded-md hover:bg-cyan-600 text-sm font-medium">Sign Up</a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+
+            <!-- Home Page -->
+            <section id="home-page" class="page">
+                <div class="pt-24 md:pt-32 bg-white">
+                    <div class="container mx-auto px-6 text-center">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-800 leading-tight">
+                            Breathe Smarter<br>Live Healthier
+                        </h1>
+                        <p class="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
+                            Monitor air quality in real-time and get personalized health recommendations to protect yourself and your loved ones from air pollution.
+                        </p>
+                        <div class="mt-8 flex justify-center space-x-4">
+                            <a href="#" data-page="signup" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
+                                Get Started Free &rarr;
+                            </a>
+                            <a href="#" class="bg-white text-gray-700 font-semibold px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors duration-300">
+                                View Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="py-20 bg-slate-50">
+                    <div class="container mx-auto px-6">
+                        <div class="text-center mb-12">
+                            <h2 class="text-3xl font-bold text-gray-800">Comprehensive Air Quality Solutions</h2>
+                            <p class="mt-2 text-gray-500">Everything you need to stay informed about air quality and protect your health.</p>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300">
+                                <div class="bg-cyan-100 text-cyan-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </div>
+                                <h3 class="mt-4 text-xl font-semibold text-gray-800">Real-Time AQI Monitoring</h3>
+                                <p class="mt-2 text-gray-500 text-sm">Get up-to-date air quality data from multiple monitoring stations in your area.</p>
+                            </div>
+                            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300">
+                                <div class="bg-green-100 text-green-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+                                   <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                </div>
+                                <h3 class="mt-4 text-xl font-semibold text-gray-800">Health Protection</h3>
+                                <p class="mt-2 text-gray-500 text-sm">Receive personalized alerts and recommendations to protect your health.</p>
+                            </div>
+                            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300">
+                                <div class="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                </div>
+                                <h3 class="mt-4 text-xl font-semibold text-gray-800">Health Analytics</h3>
+                                <p class="mt-2 text-gray-500 text-sm">Learn how air quality affects your daily activities and long-term health.</p>
+                            </div>
+                            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300">
+                                <div class="bg-purple-100 text-purple-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                </div>
+                                <h3 class="mt-4 text-xl font-semibold text-gray-800">Community Insights</h3>
+                                <p class="mt-2 text-gray-500 text-sm">Connect with your community and share air quality experiences.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sign Up Page -->
+            <section id="signup-page" class="page hidden-page">
+                 <div class="min-h-screen flex flex-col items-center justify-center py-12">
+                    <div class="w-full max-w-md px-8">
+                        <div class="flex justify-center mb-6">
+                            <a href="#" data-page="home" class="flex items-center">
+                                <div class="bg-cyan-400 p-2 rounded-lg">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                                </div>
+                                <span class="text-2xl font-bold text-gray-800 ml-2">AirHealth</span>
+                            </a>
+                        </div>
+                        <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Create your account</h2>
+                        <p class="text-center text-gray-500 mb-8">Join AirHealth and start monitoring air quality today.</p>
+                        <div class="bg-white p-8 rounded-xl shadow-md">
+                            <form class="space-y-5">
+                                <div>
+                                    <label class="text-sm font-medium text-gray-600">Full name</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                                        </div>
+                                        <input type="text" placeholder="Enter your full name" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium text-gray-600">Email address</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                                        </div>
+                                        <input type="email" placeholder="Enter your email" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium text-gray-600">Password</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                                        </div>
+                                        <input type="password" placeholder="Create a password" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.522 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium text-gray-600">Confirm password</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                                        </div>
+                                        <input type="password" placeholder="Confirm your password" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.522 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <input id="terms" name="terms" type="checkbox" class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded">
+                                    <label for="terms" class="ml-2 block text-sm text-gray-700">I agree to the <a href="#" class="font-medium text-cyan-600 hover:text-cyan-500">Terms of Service</a> and <a href="#" class="font-medium text-cyan-600 hover:text-cyan-500">Privacy Policy</a></label>
+                                </div>
+                                <div>
+                                    <button type="button" data-page="dashboard" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+                                        Create Account
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="mt-6">
+                                <div class="relative">
+                                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-300"></div></div>
+                                    <div class="relative flex justify-center text-sm"><span class="px-2 bg-white text-gray-500">Or continue with</span></div>
+                                </div>
+                                <div class="mt-6">
+                                    <button type="button" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <img class="w-5 h-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon"/>
+                                        <span class="ml-2">Sign up with Google</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-8 text-center text-sm text-gray-500">
+                            Already have an account? <a href="#" data-page="signin" class="font-medium text-cyan-600 hover:text-cyan-500">Sign in</a>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sign In Page -->
+            <section id="signin-page" class="page hidden-page">
+                <div class="min-h-screen flex flex-col items-center justify-center py-12">
+                    <div class="w-full max-w-md px-8">
+                        <div class="flex justify-center mb-6">
+                            <a href="#" data-page="home" class="flex items-center">
+                                <div class="bg-cyan-400 p-2 rounded-lg">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                                </div>
+                                <span class="text-2xl font-bold text-gray-800 ml-2">AirHealth</span>
+                            </a>
+                        </div>
+                        <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Welcome back</h2>
+                        <p class="text-center text-gray-500 mb-8">Sign in to your account to continue.</p>
+                        <div class="bg-white p-8 rounded-xl shadow-md">
+                            <form class="space-y-6">
+                                <div>
+                                    <label class="text-sm font-medium text-gray-600">Email address</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                                        </div>
+                                        <input type="email" placeholder="Enter your email" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-sm font-medium text-gray-600">Password</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                                        </div>
+                                        <input type="password" placeholder="Enter your password" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.522 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded">
+                                        <label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember me</label>
+                                    </div>
+                                    <div class="text-sm">
+                                        <a href="#" class="font-medium text-cyan-600 hover:text-cyan-500">Forgot password?</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button type="button" data-page="dashboard" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+                                        Sign In
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="mt-6">
+                                <div class="relative">
+                                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-300"></div></div>
+                                    <div class="relative flex justify-center text-sm"><span class="px-2 bg-white text-gray-500">Or continue with</span></div>
+                                </div>
+                                <div class="mt-6">
+                                    <button type="button" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                        <img class="w-5 h-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon"/>
+                                        <span class="ml-2">Sign in with Google</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-8 text-center text-sm text-gray-500">
+                            Don't have an account? <a href="#" data-page="signup" class="font-medium text-cyan-600 hover:text-cyan-500">Sign up</a>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard Page -->
+            <section id="dashboard-page" class="page hidden-page">
+                <div class="pt-24 pb-12">
+                    <div class="container mx-auto px-6">
+                        <h2 class="text-2xl font-bold text-gray-800">Mumbai Air Quality Dashboard</h2>
+                        <p class="text-gray-500">Real-time air quality monitoring and analysis for Mumbai, India.</p>
+
+                        <!-- Summary Cards -->
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-6 rounded-xl shadow-lg">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <p class="text-sm opacity-80">Current AQI</p>
+                                        <p class="text-4xl font-bold">88</p>
+                                        <p class="text-sm opacity-80">Moderate</p>
+                                    </div>
+                                    <div class="bg-white/20 p-2 rounded-full">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-md">
+                                <p class="text-gray-500">Temperature</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-1">28°C</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-md">
+                                <p class="text-gray-500">Humidity</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-1">72%</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-md">
+                                <p class="text-gray-500">Wind</p>
+                                <p class="text-3xl font-bold text-gray-800 mt-1">6.5 km/h</p>
+                            </div>
+                        </div>
+
+                        <!-- Pollutant Details -->
+                        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4">
+                                <div class="bg-red-100 text-red-600 p-3 rounded-lg"><span class="font-bold">PM2.5</span></div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">42 ug/m³</p>
+                                    <p class="text-red-600 font-semibold">Unhealthy</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4">
+                                <div class="bg-orange-100 text-orange-600 p-3 rounded-lg"><span class="font-bold">PM10</span></div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">88 ug/m³</p>
+                                    <p class="text-orange-600 font-semibold">Moderate</p>
+                                </div>
+                            </div>
+                             <div class="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4">
+                                <div class="bg-yellow-100 text-yellow-600 p-3 rounded-lg"><span class="font-bold">Areas Monitored</span></div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">6</p>
+                                    <p class="text-yellow-600 font-semibold">Active Stations</p>
+                                </div>
+                            </div>
+                             <div class="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4">
+                                <div class="bg-blue-100 text-blue-600 p-3 rounded-lg"><span class="font-bold">Health Alerts</span></div>
+                                <div>
+                                    <p class="text-gray-500 text-sm">2</p>
+                                    <p class="text-blue-600 font-semibold">Active warnings</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Health Recommendations -->
+                        <div class="mt-8 bg-white p-6 rounded-xl shadow-md">
+                            <h3 class="font-semibold text-gray-700 mb-4">Health Recommendations</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0 pt-1">
+                                        <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Limit Outdoor Activities</p>
+                                        <p class="text-sm text-gray-500">Sensitive groups should avoid strenuous activities outdoors. Everyone else should reduce prolonged or heavy exertion.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0 pt-1">
+                                        <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 2a.75.75 0 01.75.75v.5a.75.75 0 01-1.5 0v-.5A.75.75 0 0110 2zM5.22 4.22a.75.75 0 011.06 0L7.5 5.44a.75.75 0 01-1.06 1.06L5.22 5.28a.75.75 0 010-1.06zM2 10a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5A.75.75 0 012 10zm12.78 4.22a.75.75 0 010 1.06l-1.22 1.22a.75.75 0 11-1.06-1.06l1.22-1.22a.75.75 0 011.06 0zM17 10a.75.75 0 01.75-.75h.5a.75.75 0 010 1.5h-.5A.75.75 0 0117 10zm-1.22-5.78a.75.75 0 011.06 0l1.22 1.22a.75.75 0 01-1.06 1.06L15.72 5.28a.75.75 0 010-1.06zM10 18a.75.75 0 01.75-.75v-.5a.75.75 0 01-1.5 0v.5A.75.75 0 0110 18zM4.22 14.22a.75.75 0 010 1.06l-1.22 1.22a.75.75 0 01-1.06-1.06l1.22-1.22a.75.75 0 011.06 0zM10 15a5 5 0 110-10 5 5 0 010 10z" clip-rule="evenodd"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Use Air Purifiers</p>
+                                        <p class="text-sm text-gray-500">Keep windows and doors closed. Use HEPA air purifiers if available to maintain clean indoor air.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="flex-shrink-0 pt-1">
+                                        <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 8a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM3 8a7.001 7.001 0 0014 0H3z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <p class="font-medium text-gray-800">Wear a Mask Outdoors</p>
+                                        <p class="text-sm text-gray-500">If you must go outside, consider wearing a well-fitting N95 mask to reduce pollutant inhalation.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Charts -->
+                        <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div class="bg-white p-6 rounded-xl shadow-md">
+                                <h3 class="font-semibold text-gray-700 mb-2">Weekly AQI Trend</h3>
+                                <div class="h-64">
+                                    <canvas id="weeklyAqiChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-md">
+                                <h3 class="font-semibold text-gray-700 mb-2">Today's Hourly AQI</h3>
+                                <div class="h-64">
+                                    <canvas id="hourlyAqiChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-md">
+                                <h3 class="font-semibold text-gray-700 mb-2">Pollutant Breakdown</h3>
+                                <div class="h-64">
+                                    <canvas id="pollutantPieChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-md">
+                                <h3 class="font-semibold text-gray-700 mb-2">Weekly Pollutant Levels</h3>
+                                <div class="h-64">
+                                    <canvas id="weeklyPollutantChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const pages = document.querySelectorAll('.page');
+            const navLinks = document.querySelectorAll('[data-page]');
+            const mainHeader = document.getElementById('main-header');
+            let chartsInitialized = false;
+
+            // Function to switch between pages
+            const showPage = (pageId) => {
+                // Hide all pages
+                pages.forEach(page => {
+                    page.classList.add('hidden-page');
+                });
+
+                // Show the target page
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.remove('hidden-page');
+                }
+
+                // Show/hide header based on page
+                if (pageId === 'home-page' || pageId === 'dashboard-page') {
+                    mainHeader.classList.remove('hidden-page');
+                } else {
+                    mainHeader.classList.add('hidden-page');
+                }
+                
+                // Initialize charts only when dashboard is visible and not already initialized
+                if (pageId === 'dashboard-page' && !chartsInitialized) {
+                    initializeCharts();
+                    chartsInitialized = true;
+                }
+                
+                // Scroll to top on page change
+                window.scrollTo(0, 0);
+            };
+
+            // Add click listeners to all navigation elements
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = e.currentTarget.dataset.page + '-page';
+                    showPage(pageId);
+                });
+            });
+
+            // Show the home page by default
+            showPage('home-page');
+
+            // --- Chart.js Initialization ---
+            function initializeCharts() {
+                // 1. Weekly AQI Trend Chart
+                const weeklyAqiCtx = document.getElementById('weeklyAqiChart').getContext('2d');
+                new Chart(weeklyAqiCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'AQI',
+                            data: [75, 90, 110, 125, 105, 85, 95],
+                            borderColor: '#38bdf8',
+                            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: false } }
+                    }
+                });
+
+                // 2. Today's Hourly AQI Chart
+                const hourlyAqiCtx = document.getElementById('hourlyAqiChart').getContext('2d');
+                new Chart(hourlyAqiCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+                        datasets: [{
+                            label: 'AQI',
+                            data: [80, 75, 90, 115, 125, 120, 110, 100],
+                            borderColor: '#4ade80',
+                            fill: false,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: false } }
+                    }
+                });
+
+                // 3. Pollutant Breakdown Pie Chart
+                const pollutantPieCtx = document.getElementById('pollutantPieChart').getContext('2d');
+                new Chart(pollutantPieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['PM2.5', 'PM10', 'O3', 'NO2', 'SO2', 'CO'],
+                        datasets: [{
+                            data: [42, 35, 10, 5, 5, 3],
+                            backgroundColor: ['#ef4444', '#f97316', '#eab308', '#8b5cf6', '#3b82f6', '#64748b'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                            }
+                        }
+                    }
+                });
+
+                // 4. Weekly Pollutant Levels Bar Chart
+                const weeklyPollutantCtx = document.getElementById('weeklyPollutantChart').getContext('2d');
+                new Chart(weeklyPollutantCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [
+                            {
+                                label: 'PM2.5',
+                                data: [40, 45, 55, 60, 50, 42, 48],
+                                backgroundColor: '#ef4444',
+                            },
+                            {
+                                label: 'PM10',
+                                data: [80, 90, 100, 110, 95, 85, 92],
+                                backgroundColor: '#f97316',
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { stacked: true },
+                            y: { stacked: true, beginAtZero: true }
+                        },
+                        plugins: {
+                            legend: { position: 'top' }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
