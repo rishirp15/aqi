@@ -23,6 +23,12 @@
         .hidden-page {
             display: none;
         }
+        /* Style for validation error messages */
+        .error-text {
+            color: #ef4444; /* red-500 */
+            font-size: 0.75rem; /* text-xs */
+            margin-top: 0.25rem;
+        }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -129,55 +135,54 @@
                         <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Create your account</h2>
                         <p class="text-center text-gray-500 mb-8">Join AirHealth and start monitoring air quality today.</p>
                         <div class="bg-white p-8 rounded-xl shadow-md">
-                            <form class="space-y-5">
+                            <form id="signup-form" class="space-y-5" novalidate>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Full name</label>
+                                    <label for="signup-name" class="text-sm font-medium text-gray-600">Full name</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                                         </div>
-                                        <input type="text" placeholder="Enter your full name" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                        <input id="signup-name" type="text" placeholder="Enter your full name" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
                                     </div>
+                                    <p id="signup-name-error" class="error-text"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Email address</label>
+                                    <label for="signup-email" class="text-sm font-medium text-gray-600">Email address</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
                                         </div>
-                                        <input type="email" placeholder="Enter your email" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                        <input id="signup-email" type="email" placeholder="Enter your email" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
                                     </div>
+                                     <p id="signup-email-error" class="error-text"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Password</label>
+                                    <label for="signup-password" class="text-sm font-medium text-gray-600">Password</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
                                         </div>
-                                        <input type="password" placeholder="Create a password" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
-                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.522 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
-                                        </div>
+                                        <input id="signup-password" type="password" placeholder="Create a password" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
                                     </div>
+                                     <p id="signup-password-error" class="error-text"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Confirm password</label>
+                                    <label for="signup-confirm-password" class="text-sm font-medium text-gray-600">Confirm password</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
                                         </div>
-                                        <input type="password" placeholder="Confirm your password" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
-                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.522 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
-                                        </div>
+                                        <input id="signup-confirm-password" type="password" placeholder="Confirm your password" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
                                     </div>
+                                    <p id="signup-confirm-password-error" class="error-text"></p>
                                 </div>
                                 <div class="flex items-center">
                                     <input id="terms" name="terms" type="checkbox" class="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded">
                                     <label for="terms" class="ml-2 block text-sm text-gray-700">I agree to the <a href="#" class="font-medium text-cyan-600 hover:text-cyan-500">Terms of Service</a> and <a href="#" class="font-medium text-cyan-600 hover:text-cyan-500">Privacy Policy</a></label>
                                 </div>
+                                <p id="terms-error" class="error-text"></p>
                                 <div>
-                                    <button type="button" data-page="dashboard" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+                                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
                                         Create Account
                                     </button>
                                 </div>
@@ -189,7 +194,7 @@
                                 </div>
                                 <div class="mt-6">
                                     <button type="button" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                        <img class="w-5 h-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon"/>
+                                        <img class="w-5 h-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon" onerror="this.onerror=null;this.src='https://placehold.co/20x20/ffffff/000000?text=G';">
                                         <span class="ml-2">Sign up with Google</span>
                                     </button>
                                 </div>
@@ -217,27 +222,26 @@
                         <h2 class="text-3xl font-bold text-center text-gray-800 mb-2">Welcome back</h2>
                         <p class="text-center text-gray-500 mb-8">Sign in to your account to continue.</p>
                         <div class="bg-white p-8 rounded-xl shadow-md">
-                            <form class="space-y-6">
+                            <form id="signin-form" class="space-y-6" novalidate>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Email address</label>
+                                    <label for="signin-email" class="text-sm font-medium text-gray-600">Email address</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
                                         </div>
-                                        <input type="email" placeholder="Enter your email" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                        <input id="signin-email" type="email" placeholder="Enter your email" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
                                     </div>
+                                    <p id="signin-email-error" class="error-text"></p>
                                 </div>
                                 <div>
-                                    <label class="text-sm font-medium text-gray-600">Password</label>
+                                    <label for="signin-password" class="text-sm font-medium text-gray-600">Password</label>
                                     <div class="mt-1 relative rounded-md shadow-sm">
                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
                                         </div>
-                                        <input type="password" placeholder="Enter your password" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
-                                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                            <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.522 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
-                                        </div>
+                                        <input id="signin-password" type="password" placeholder="Enter your password" class="block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
                                     </div>
+                                    <p id="signin-password-error" class="error-text"></p>
                                 </div>
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
@@ -249,7 +253,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="button" data-page="dashboard" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
+                                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
                                         Sign In
                                     </button>
                                 </div>
@@ -261,7 +265,7 @@
                                 </div>
                                 <div class="mt-6">
                                     <button type="button" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                        <img class="w-5 h-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon"/>
+                                        <img class="w-5 h-5" src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon" onerror="this.onerror=null;this.src='https://placehold.co/20x20/ffffff/000000?text=G';">
                                         <span class="ml-2">Sign in with Google</span>
                                     </button>
                                 </div>
@@ -416,37 +420,28 @@
             const mainHeader = document.getElementById('main-header');
             let chartsInitialized = false;
 
-            // Function to switch between pages
+            // --- Page Navigation ---
             const showPage = (pageId) => {
-                // Hide all pages
-                pages.forEach(page => {
-                    page.classList.add('hidden-page');
-                });
-
-                // Show the target page
+                pages.forEach(page => page.classList.add('hidden-page'));
                 const targetPage = document.getElementById(pageId);
                 if (targetPage) {
                     targetPage.classList.remove('hidden-page');
                 }
 
-                // Show/hide header based on page
                 if (pageId === 'home-page' || pageId === 'dashboard-page') {
                     mainHeader.classList.remove('hidden-page');
                 } else {
                     mainHeader.classList.add('hidden-page');
                 }
                 
-                // Initialize charts only when dashboard is visible and not already initialized
                 if (pageId === 'dashboard-page' && !chartsInitialized) {
                     initializeCharts();
                     chartsInitialized = true;
                 }
                 
-                // Scroll to top on page change
                 window.scrollTo(0, 0);
             };
 
-            // Add click listeners to all navigation elements
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -454,6 +449,156 @@
                     showPage(pageId);
                 });
             });
+
+            // --- Form Validation ---
+            const signupForm = document.getElementById('signup-form');
+            const signinForm = document.getElementById('signin-form');
+
+            // Helper function to show an error
+            const showError = (input, message) => {
+                const errorElement = document.getElementById(`${input.id}-error`);
+                input.classList.add('border-red-500');
+                input.classList.remove('border-gray-300');
+                if(errorElement) errorElement.textContent = message;
+            };
+            
+            // Helper function for terms checkbox
+            const showTermsError = (message) => {
+                 const errorElement = document.getElementById('terms-error');
+                 if(errorElement) errorElement.textContent = message;
+            }
+
+            // Helper function to clear an error
+            const clearError = (input) => {
+                const errorElement = document.getElementById(`${input.id}-error`);
+                input.classList.remove('border-red-500');
+                input.classList.add('border-gray-300');
+                if(errorElement) errorElement.textContent = '';
+            };
+            
+            const clearTermsError = () => {
+                 const errorElement = document.getElementById('terms-error');
+                 if(errorElement) errorElement.textContent = '';
+            }
+
+            // Helper function to validate email format
+            const isValidEmail = (email) => {
+                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            };
+
+            if (signupForm) {
+                signupForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    let isValid = true;
+
+                    const name = document.getElementById('signup-name');
+                    const email = document.getElementById('signup-email');
+                    const password = document.getElementById('signup-password');
+                    const confirmPassword = document.getElementById('signup-confirm-password');
+                    const terms = document.getElementById('terms');
+                    
+                    // Clear previous errors
+                    [name, email, password, confirmPassword].forEach(clearError);
+                    clearTermsError();
+
+                    // Name validation
+                    if (name.value.trim() === '') {
+                        showError(name, 'Full name is required.');
+                        isValid = false;
+                    }
+
+                    // Email validation
+                    if (email.value.trim() === '') {
+                        showError(email, 'Email is required.');
+                        isValid = false;
+                    } else if (!isValidEmail(email.value)) {
+                        showError(email, 'Please enter a valid email address.');
+                        isValid = false;
+                    }
+
+                    // Password validation
+                    const passwordValue = password.value;
+                    let passwordIsValid = true;
+                    let passwordErrorMessage = '';
+
+                    if (passwordValue.trim() === '') {
+                        passwordErrorMessage = 'Password is required.';
+                        passwordIsValid = false;
+                    } else if (passwordValue.length < 8) {
+                        passwordErrorMessage = 'Password must be at least 8 characters long.';
+                        passwordIsValid = false;
+                    } else if (!/[A-Z]/.test(passwordValue)) {
+                        passwordErrorMessage = 'Password must contain at least one uppercase letter.';
+                        passwordIsValid = false;
+                    } else if (!/\d/.test(passwordValue)) {
+                        passwordErrorMessage = 'Password must contain at least one digit.';
+                        passwordIsValid = false;
+                    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(passwordValue)) {
+                        passwordErrorMessage = 'Password must contain at least one special character.';
+                        passwordIsValid = false;
+                    }
+
+                    if (!passwordIsValid) {
+                        showError(password, passwordErrorMessage);
+                        isValid = false;
+                    }
+
+
+                    // Confirm password validation
+                    if (confirmPassword.value.trim() === '') {
+                        showError(confirmPassword, 'Please confirm your password.');
+                        isValid = false;
+                    } else if (password.value !== confirmPassword.value) {
+                        showError(confirmPassword, 'Passwords do not match.');
+                        isValid = false;
+                    }
+                    
+                    // Terms validation
+                    if (!terms.checked) {
+                        showTermsError('You must agree to the terms and conditions.');
+                        isValid = false;
+                    }
+
+                    if (isValid) {
+                        console.log('Sign up form is valid. Navigating to dashboard.');
+                        showPage('dashboard-page');
+                    }
+                });
+            }
+
+            if (signinForm) {
+                signinForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    let isValid = true;
+
+                    const email = document.getElementById('signin-email');
+                    const password = document.getElementById('signin-password');
+                    
+                     // Clear previous errors
+                    [email, password].forEach(clearError);
+
+                    // Email validation
+                    if (email.value.trim() === '') {
+                        showError(email, 'Email is required.');
+                        isValid = false;
+                    } else if (!isValidEmail(email.value)) {
+                        showError(email, 'Please enter a valid email address.');
+                        isValid = false;
+                    }
+
+                    // Password validation
+                    if (password.value.trim() === '') {
+                        showError(password, 'Password is required.');
+                        isValid = false;
+                    }
+
+                    if (isValid) {
+                        console.log('Sign in form is valid. Navigating to dashboard.');
+                        showPage('dashboard-page');
+                    }
+                });
+            }
 
             // Show the home page by default
             showPage('home-page');
