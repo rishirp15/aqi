@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirHealth - Air Quality Monitoring</title>
+    <!-- Custom Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-slate-50">
+
+    <!-- Main Application Container -->
+    <div id="app">
+
+        <!-- Header -->
+        <header id="main-header" class="bg-white/80 backdrop-blur-sm shadow-sm fixed top-0 left-0 right-0 z-50">
+            <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+                <a href="index.html" class="flex items-center">
+                    <div class="bg-cyan-400 p-2 rounded-lg">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </div>
+                    <span class="text-2xl font-bold text-gray-800 ml-2">AirHealth</span>
+                </a>
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="nav-link active">Home</a>
+                    <a href="dashboard.html" class="nav-link">Dashboard</a>
+                    <a href="#" class="nav-link">About</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="signin.html" class="nav-link">Sign In</a>
+                    <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Home Page Section -->
+            <section id="home-page" class="page">
+                <div class="pt-24 md:pt-32 bg-white">
+                    <div class="container mx-auto px-6 text-center">
+                        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-800 leading-tight">
+                            Breathe Smarter<br>Live Healthier
+                        </h1>
+                        <p class="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
+                            Monitor air quality in real-time and get personalized health recommendations to protect yourself and your loved ones from air pollution.
+                        </p>
+                        <div class="mt-8 flex justify-center space-x-4">
+                            <a href="signup.html" class="btn btn-gradient group">
+                                Get Started Free <span class="group-hover:translate-x-2 transition-transform duration-300">&rarr;</span>
+                            </a>
+                            <a href="dashboard.html" class="btn btn-secondary">
+                                View Demo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="py-20 bg-slate-50">
+                    <div class="container mx-auto px-6">
+                        <div class="text-center mb-12">
+                            <h2 class="text-3xl font-bold text-gray-800">Comprehensive Air Quality Solutions</h2>
+                            <p class="mt-2 text-gray-500">Everything you need to stay informed about air quality and protect your health.</p>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                            <!-- Feature Card 1 -->
+                            <div class="feature-card">
+                                <div class="feature-icon bg-cyan-100 text-cyan-600">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                </div>
+                                <h3 class="mt-4 text-xl font-semibold text-gray-800">Real-Time AQI Monitoring</h3>
+                                <p class="mt-2 text-gray-500 text-sm">Get up-to-date air quality data from multiple monitoring stations in your area.</p>
+                            </div>
+                            <!-- Feature Card 2 -->
+                            <div class="feature-card">
+                                <div class="feature-icon bg-green-100 text-green-600">
+                                   <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                </div>
+                                <h3 class="mt-4 text-xl font-semibold text-gray-800">Health Protection</h3>
+                                <p class="mt-2 text-gray-500 text-sm">Receive personalized alerts and recommendations to protect your health.</p>
+                            </div>
+                            <!-- Feature Card 3 -->
+                            <div class="feature-card">
+                                <div class="feature-icon bg-blue-100 text-blue-600">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                </div>
+                                <h3 class="mt-4 text-xl font-semibold text-gray-800">Health Analytics</h3>
+                                <p class="mt-2 text-gray-500 text-sm">Learn how air quality affects your daily activities and long-term health.</p>
+                            </div>
+                            <!-- Feature Card 4 -->
+                            <div class="feature-card">
+                                <div class="feature-icon bg-purple-100 text-purple-600">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                </div>
+                                <h3 class="mt-4 text-xl font-semibold text-gray-800">Community Insights</h3>
+                                <p class="mt-2 text-gray-500 text-sm">Connect with your community and share air quality experiences.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="script.js"></script>
+</body>
+</html>
