@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}Pollutant Guide{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in space-y-6">
+    <div class="glass-card p-6">
+        <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+            <i class="fas fa-atom text-cyan-400"></i>
+            Guide to Common Air Pollutants
+        </h1>
+        <p class="text-slate-400 mt-2">
+            Understand the pollutants that affect the Air Quality Index.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div class="glass-card p-6 space-y-4 border-t-4 border-slate-400">
+            <div class="flex items-center gap-4">
+                <div class="text-4xl text-slate-400"><i class="fas fa-smog"></i></div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">PM2.5</h2>
+                    <p class="text-sm text-slate-400">Fine Particulate Matter</p>
+                </div>
+            </div>
+            <p class="text-slate-300">
+                Tiny inhalable particles smaller than 2.5 micrometers. They can penetrate deep into the lungs and enter the bloodstream, posing the greatest health risk.
+            </p>
+            <div class="pt-2 space-y-3 text-sm">
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <h4 class="font-semibold text-sky-300 mb-1">Common Sources</h4>
+                    <p class="text-slate-400">Vehicle exhaust, power plants, wildfires, industrial processes, and cooking.</p>
+                </div>
+                <div class="bg-red-900/20 p-3 rounded-lg">
+                    <h4 class="font-semibold text-red-300 mb-1">Primary Health Effects</h4>
+                    <p class="text-slate-400">Lung irritation, asthma attacks, reduced lung function, and increased risk of heart attacks and strokes.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-6 space-y-4 border-t-4 border-blue-400">
+            <div class="flex items-center gap-4">
+                <div class="text-4xl text-blue-400"><i class="fas fa-sun"></i></div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">O₃ (Ozone)</h2>
+                    <p class="text-sm text-slate-400">Ground-Level Ozone</p>
+                </div>
+            </div>
+            <p class="text-slate-300">
+                A harmful pollutant created by chemical reactions between Nitrogen Oxides (NOx) and Volatile Organic Compounds (VOCs) in the presence of sunlight.
+            </p>
+            <div class="pt-2 space-y-3 text-sm">
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <h4 class="font-semibold text-sky-300 mb-1">Common Sources</h4>
+                    <p class="text-slate-400">Not emitted directly. Forms from vehicle exhaust, industrial emissions, and chemical solvents on hot, sunny days.</p>
+                </div>
+                <div class="bg-red-900/20 p-3 rounded-lg">
+                    <h4 class="font-semibold text-red-300 mb-1">Primary Health Effects</h4>
+                    <p class="text-slate-400">Chest pain, coughing, throat irritation, and worsening of conditions like asthma and bronchitis.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-6 space-y-4 border-t-4 border-red-500">
+            <div class="flex items-center gap-4">
+                <div class="text-4xl text-red-500"><i class="fas fa-fire-alt"></i></div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">CO (Carbon Monoxide)</h2>
+                    <p class="text-sm text-slate-400">Colorless, Odorless Gas</p>
+                </div>
+            </div>
+            <p class="text-slate-300">
+                A toxic gas formed by the incomplete combustion of carbon-based fuels. It reduces the amount of oxygen that can be transported in the bloodstream.
+            </p>
+            <div class="pt-2 space-y-3 text-sm">
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <h4 class="font-semibold text-sky-300 mb-1">Common Sources</h4>
+                    <p class="text-slate-400">Vehicle exhaust, gas stoves, generators, and burning wood, coal, or propane.</p>
+                </div>
+                <div class="bg-red-900/20 p-3 rounded-lg">
+                    <h4 class="font-semibold text-red-300 mb-1">Primary Health Effects</h4>
+                    <p class="text-slate-400">Headaches, dizziness, and nausea at low levels. Can be fatal at high concentrations, especially indoors.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-6 space-y-4 border-t-4 border-orange-400">
+            <div class="flex items-center gap-4">
+                <div class="text-4xl text-orange-400"><i class="fas fa-industry"></i></div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">NO₂ (Nitrogen Dioxide)</h2>
+                    <p class="text-sm text-slate-400">Reactive Gas</p>
+                </div>
+            </div>
+            <p class="text-slate-300">
+                A highly reactive gas that contributes to smog and acid rain. It can inflame the lining of the lungs and reduce immunity to lung infections.
+            </p>
+            <div class="pt-2 space-y-3 text-sm">
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <h4 class="font-semibold text-sky-300 mb-1">Common Sources</h4>
+                    <p class="text-slate-400">Emissions from cars, trucks, buses, power plants, and off-road equipment.</p>
+                </div>
+                <div class="bg-red-900/20 p-3 rounded-lg">
+                    <h4 class="font-semibold text-red-300 mb-1">Primary Health Effects</h4>
+                    <p class="text-slate-400">Aggravates respiratory diseases like asthma, leading to wheezing, coughing, and difficulty breathing.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass-card p-6 space-y-4 border-t-4 border-yellow-400">
+            <div class="flex items-center gap-4">
+                <div class="text-4xl text-yellow-400"><i class="fas fa-flask"></i></div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">SO₂ (Sulfur Dioxide)</h2>
+                    <p class="text-sm text-slate-400">Pungent Gas</p>
+                </div>
+            </div>
+            <p class="text-slate-300">
+                A gas produced from burning fossil fuels like coal and oil. It can harm the respiratory system and make breathing difficult, especially for children and asthmatics.
+            </p>
+            <div class="pt-2 space-y-3 text-sm">
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <h4 class="font-semibold text-sky-300 mb-1">Common Sources</h4>
+                    <p class="text-slate-400">Fossil fuel combustion at power plants, industrial facilities, and from locomotive and ship engines.</p>
+                </div>
+                <div class="bg-red-900/20 p-3 rounded-lg">
+                    <h4 class="font-semibold text-red-300 mb-1">Primary Health Effects</h4>
+                    <p class="text-slate-400">Affects the respiratory system, particularly lung function. Can irritate the eyes and worsen asthma.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card p-6 space-y-4 border-t-4 border-slate-500">
+            <div class="flex items-center gap-4">
+                <div class="text-4xl text-slate-500"><i class="fas fa-smog"></i></div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white">PM10</h2>
+                    <p class="text-sm text-slate-400">Coarse Particulate Matter</p>
+                </div>
+            </div>
+            <p class="text-slate-300">
+                Inhalable particles with diameters of 10 micrometers or smaller. They are generally less harmful than PM2.5 as they don't penetrate as deeply.
+            </p>
+            <div class="pt-2 space-y-3 text-sm">
+                <div class="bg-slate-800/50 p-3 rounded-lg">
+                    <h4 class="font-semibold text-sky-300 mb-1">Common Sources</h4>
+                    <p class="text-slate-400">Dust from construction sites, landfills, agriculture, wildfires, and pollen.</p>
+                </div>
+                <div class="bg-red-900/20 p-3 rounded-lg">
+                    <h4 class="font-semibold text-red-300 mb-1">Primary Health Effects</h4>
+                    <p class="text-slate-400">Can irritate the eyes, nose, and throat. Can worsen conditions like asthma and heart disease.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

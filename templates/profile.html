@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in max-w-2xl mx-auto">
+    <div class="glass-card p-8">
+        <h1 class="text-3xl font-bold mb-6 text-white flex items-center gap-3"><i class="fas fa-user-circle text-teal-300"></i>User Profile</h1>
+        
+        <form method="POST" action="{{ url_for('main.profile') }}" class="space-y-6 mb-8">
+            <div>
+                <label class="block text-slate-300 font-medium mb-2">Full Name</label>
+                <input type="text" value="{{ user.full_name }}" readonly class="form-input bg-slate-800/50 cursor-not-allowed">
+            </div>
+            <div>
+                <label class="block text-slate-300 font-medium mb-2">Email</label>
+                <input type="email" value="{{ user.email }}" readonly class="form-input bg-slate-800/50 cursor-not-allowed">
+            </div>
+            <div>
+                <label class="block text-slate-300 font-medium mb-2">Preferred City</label>
+                <input type="text" name="preferred_city" value="{{ user.preferred_city }}" class="form-input">
+            </div>
+            <button type="submit" class="w-full btn btn-primary py-3">Update Profile</button>
+        </form>
+
+        <h3 class="text-xl font-bold mb-4 text-white flex items-center gap-2"><i class="fas fa-star text-yellow-400"></i>Favorite Cities</h3>
+        <div id="favorites-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+            {% for fav in favorites %}
+            <div id="fav-{{ fav }}" class="glass-card p-3 rounded-xl flex items-center justify-between bg-slate-800/50">
+                <span class="font-medium text-slate-300">{{ fav }}</span>
+                <button onclick="removeFavorite('{{ fav }}')" class="text-red-400 hover:text-red-300 transition-colors"><i class="fas fa-trash-alt"></i></button>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="flex items-center gap-2 mt-4">
+            <input type="text" id="newFavoriteInput" placeholder="Add new favorite city..." class="form-input">
+            <button onclick="addFavorite()" class="btn btn-secondary">Add</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function addFavorite() {
+        const cityInput = document.getElementById('newFavoriteInput');
+        const city = cityInput.value.trim();
+        if (!city) return showToast('Please enter a city name.', true);
+
+        try {
+            const response = await fetch('/api/add_favorite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ city })
+            });
+            const data = await response.json();
+            if (response.ok && data.success) {
+                showToast(`Added ${city} to favorites!`);
+                const grid = document.getElementById('favorites-grid');
+                const newFavEl = document.createElement('div');
+                newFavEl.id = `fav-${city}`;
+                newFavEl.className = 'glass-card p-3 rounded-xl flex items-center justify-between bg-slate-800/50';
+                newFavEl.innerHTML = `
+                    <span class="font-medium text-slate-300">${city}</span>
+                    <button onclick="removeFavorite('${city}')" class="text-red-400 hover:text-red-300 transition-colors"><i class="fas fa-trash-alt"></i></button>
+                `;
+                grid.appendChild(newFavEl);
+                cityInput.value = '';
+            } else {
+                throw new Error(data.error || 'Failed to add favorite.');
+            }
+        } catch (err) {
+            showToast(err.message, true);
+        }
+    }
+
+    async function removeFavorite(city) {
+        if (!confirm(`Are you sure you want to remove ${city} from favorites?`)) return;
+
+        try {
+            const response = await fetch('/api/remove_favorite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ city })
+            });
+            const data = await response.json();
+            if (response.ok && data.success) {
+                showToast(`Removed ${city} from favorites.`);
+                document.getElementById(`fav-${city}`).remove();
+            } else {
+                throw new Error(data.error || 'Failed to remove favorite.');
+            }
+        } catch (err) {
+            showToast(err.message, true);
+        }
+    }
+</script>
+{% endblock %}

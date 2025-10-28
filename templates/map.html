@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Map View{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in space-y-6">
+    <div class="glass-card p-6">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+                    <i class="fas fa-map-marked-alt text-teal-300"></i>
+                    Interactive Air Quality Map
+                </h1>
+                <p class="text-slate-400 mt-2">
+                    Hover over a circle for details or search for a city.
+                </p>
+            </div>
+            <div class="relative">
+                <input type="text" id="mapSearchInput" placeholder="Search for a city..." class="form-input w-full md:w-64">
+                <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            </div>
+            </div>
+    </div>
+    
+    <div id="map" class="w-full h-[65vh] rounded-2xl shadow-2xl z-0"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+{% endblock %}

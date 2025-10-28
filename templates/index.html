@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}AirWatch - Real-Time Air Quality Monitoring{% endblock %}
+
+{% block content %}
+<div class="space-y-20 md:space-y-32 animate-fade-in">
+    <section class="text-center max-w-4xl mx-auto pt-10 md:pt-20">
+        <i class="fas fa-wind text-6xl text-teal-400 mb-6"></i>
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 leading-tight">
+            Monitor Air Quality in Real-Time
+        </h1>
+        <p class="text-lg md:text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
+            Get live air quality index (AQI) data, weather updates, and actionable health tips for cities around the world.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-2 max-w-lg mx-auto">
+            <input type="text" id="citySearchInput" placeholder="Enter a city name..." class="form-input flex-grow">
+            <button onclick="searchCity()" class="btn btn-primary w-full sm:w-auto">
+                <i class="fas fa-search"></i>
+                <span>Check AQI</span>
+            </button>
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center text-white mb-12">Powerful Features at Your Fingertips</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div class="glass-card p-8">
+                <div class="text-4xl text-sky-400 mb-4"><i class="fas fa-chart-line"></i></div>
+                <h3 class="text-xl font-bold text-white mb-2">Live Data & Charts</h3>
+                <p class="text-slate-400">
+                    Visualize real-time pollutant levels and 24-hour trends with our interactive charts and graphs.
+                </p>
+            </div>
+            <div class="glass-card p-8">
+                <div class="text-4xl text-emerald-400 mb-4"><i class="fas fa-map-marked-alt"></i></div>
+                <h3 class="text-xl font-bold text-white mb-2">Interactive AQI Map</h3>
+                <p class="text-slate-400">
+                    Explore air quality across different locations with an easy-to-use, color-coded interactive map.
+                </p>
+            </div>
+            <div class="glass-card p-8">
+                <div class="text-4xl text-yellow-400 mb-4"><i class="fas fa-lightbulb"></i></div>
+                <h3 class="text-xl font-bold text-white mb-2">Actionable Health Tips</h3>
+                <p class="text-slate-400">
+                    Receive relevant health recommendations based on the current air quality to protect yourself and your family.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl font-bold text-white mb-4">Ready to Breathe Clearer?</h2>
+        <p class="text-lg text-slate-400 mb-8">
+            Create an account to save your favorite locations, set a preferred city, and get a personalized experience.
+        </p>
+        <a href="{{ url_for('auth.signup') }}" class="btn btn-primary btn-lg px-10 py-4">
+            Sign Up for Free
+        </a>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function searchCity() {
+        const city = document.getElementById('citySearchInput').value.trim();
+        if (city) {
+            window.location.href = `/dashboard?city=${encodeURIComponent(city)}`;
+        } else {
+            showToast('Please enter a city name.', true);
+        }
+    }
+</script>
+{% endblock %}

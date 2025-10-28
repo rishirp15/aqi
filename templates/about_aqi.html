@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}About the Air Quality Index (AQI){% endblock %}
+
+{% block content %}
+<div class="animate-fade-in space-y-8">
+    <div class="glass-card p-6">
+        <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+            <i class="fas fa-info-circle text-sky-400"></i>
+            About the Air Quality Index (AQI)
+        </h1>
+        <p class="text-slate-400 mt-2">
+            Understanding the numbers that help protect your health.
+        </p>
+    </div>
+
+    <div class="glass-card p-8 space-y-6">
+        <div>
+            <h2 class="text-2xl font-semibold text-white mb-2">What is the AQI?</h2>
+            <p class="text-slate-300">
+                The Air Quality Index (AQI) is a simple, color-coded scale used by government agencies to communicate how polluted the air currently is or how polluted it is forecast to become. It helps you understand what the local air quality means for your health. The AQI focuses on health effects you may experience within a few hours or days after breathing polluted air.
+            </p>
+        </div>
+
+        <div>
+            <h2 class="text-2xl font-semibold text-white mb-2">Why is this Project Useful?</h2>
+            <p class="text-slate-300">
+                While standard AQI reports tell you the current air quality, this project takes it a step further. By using machine learning, <strong>AirWatch</strong> provides:
+            </p>
+            <ul class="list-disc list-inside text-slate-300 mt-2 space-y-1">
+                <li><strong>Real-Time Dashboard:</strong> A single, easy-to-read view of the current AQI, weather, and pollutant breakdown.</li>
+                <li><strong>Current AQI Predictions:</strong> If official sensor data isn't available, you can input local pollutant readings to get an estimated AQI.</li>
+                <li><strong>7-Day Forecasting:</strong> Our model predicts the AQI for the week ahead, helping you plan activities and take preventive measures before pollution levels rise.</li>
+                <li><strong>Personalized Health Tips:</strong> The dashboard provides actionable advice tailored to the current AQI and your context (e.g., at home, outdoors), empowering you to reduce your exposure.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="glass-card p-8">
+        <h2 class="text-2xl font-semibold text-white mb-4 text-center">AQI Categories and Health Implications</h2>
+        <div class="space-y-4">
+            <div class="p-4 rounded-lg border-l-4 bg-green-500/10 border-green-500">
+                <h3 class="font-bold text-white">Good (0 - 50)</h3>
+                <p class="text-sm text-slate-300">Air quality is satisfactory, and air pollution poses little or no risk. It's a great day to be active outside.</p>
+            </div>
+            <div class="p-4 rounded-lg border-l-4 bg-yellow-500/10 border-yellow-500">
+                <h3 class="font-bold text-white">Moderate (51 - 100)</h3>
+                <p class="text-sm text-slate-300">Air quality is acceptable. However, unusually sensitive individuals should consider reducing prolonged or heavy exertion outdoors.</p>
+            </div>
+            <div class="p-4 rounded-lg border-l-4 bg-orange-500/10 border-orange-500">
+                <h3 class="font-bold text-white">Unhealthy for Sensitive Groups (101 - 150)</h3>
+                <p class="text-sm text-slate-300">People with heart or lung disease, older adults, and children should reduce prolonged or heavy exertion.</p>
+            </div>
+            <div class="p-4 rounded-lg border-l-4 bg-red-500/10 border-red-500">
+                <h3 class="font-bold text-white">Unhealthy (151 - 200)</h3>
+                <p class="text-sm text-slate-300">Everyone may begin to experience health effects. Sensitive groups may experience more serious health effects. Reduce heavy exertion outdoors.</p>
+            </div>
+            <div class="p-4 rounded-lg border-l-4 bg-purple-500/10 border-purple-500">
+                <h3 class="font-bold text-white">Very Unhealthy (201 - 300)</h3>
+                <p class="text-sm text-slate-300">Health alert: The risk of health effects is increased for everyone. Avoid prolonged or heavy exertion outdoors.</p>
+            </div>
+            <div class="p-4 rounded-lg border-l-4 bg-rose-800/20 border-rose-700">
+                <h3 class="font-bold text-white">Hazardous (301+)</h3>
+                <p class="text-sm text-slate-300">Health warning of emergency conditions: everyone is more likely to be affected. Avoid all outdoor physical activity.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

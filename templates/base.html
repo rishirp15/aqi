@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AirWatch - Air Quality Monitor{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="min-h-screen">
+    <div id="toast" class="toast"></div>
+
+    {% if session.user_id %}
+    <aside class="fixed left-0 top-0 h-full w-64 bg-slate-900/70 backdrop-blur-lg border-r border-slate-700/50 z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out" aria-label="Sidebar">
+        <div class="p-6">
+            <a href="{{ url_for('main.dashboard') }}" class="text-2xl font-bold mb-8 text-teal-400 flex items-center gap-2"><i class="fas fa-wind"></i>AirWatch</a>
+            <ul class="space-y-3 mt-8">
+                <li><a href="{{ url_for('main.dashboard') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-chart-line w-6 text-center mr-3 text-teal-400"></i>Dashboard</a></li>
+                <li><a href="{{ url_for('main.map_view') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-map-marked-alt w-6 text-center mr-3 text-teal-400"></i>Map View</a></li>
+                <li><a href="{{ url_for('main.tips') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-lightbulb w-6 text-center mr-3 text-teal-400"></i>Tips</a></li>
+                <li><a href="{{ url_for('main.pollutant_guide') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white"><i class="fas fa-atom w-6 text-center mr-3 text-teal-400"></i>Pollutant Guide</a></li>
+                <li>
+                    <a href="{{ url_for('main.predictor') }}" class="flex items-center justify-between p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200">
+                        <span class="flex items-center">
+                            <i class="fas fa-brain w-6 text-center mr-3 text-teal-400"></i>AQI Predictor
+                        </span>
+                        <span class="text-xs bg-sky-500 text-white font-bold px-2 py-0.5 rounded-full">NEW</span>
+                    </a>
+                </li>
+                <li><a href="{{ url_for('main.about_aqi') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-info-circle w-6 text-center mr-3 text-teal-400"></i>What is AQI?</a></li>
+                <li><a href="{{ url_for('main.profile') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-user-circle w-6 text-center mr-3 text-teal-400"></i>Profile</a></li>
+                <li class="pt-4"><a href="{{ url_for('auth.logout') }}" class="flex items-center p-3 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors duration-200"><i class="fas fa-sign-out-alt w-6 text-center mr-3"></i>Logout</a></li>
+            </ul>
+        </div>
+    </aside>
+    <div class="lg:ml-64 transition-all duration-300">
+    {% endif %}
+
+    <nav class="sticky top-0 bg-slate-900/70 backdrop-blur-lg p-4 flex justify-between items-center shadow-lg border-b border-white/10 z-30">
+        <div class="flex items-center">
+            {% if session.user_id %}
+            <button class="lg:hidden mr-4 p-2 rounded-lg bg-teal-500/20 hover:bg-teal-500/30" onclick="toggleSidebar()" aria-label="Toggle menu">
+                <i class="fas fa-bars text-teal-400"></i>
+            </button>
+            {% else %}
+            <a href="{{ url_for('main.index') }}" class="text-xl font-bold text-teal-400 flex items-center gap-2"><i class="fas fa-wind"></i>AirWatch</a>
+            {% endif %}
+        </div>
+        <div class="flex items-center space-x-4">
+            {% if not session.user_id %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Login</a>
+                <a href="{{ url_for('auth.signup') }}" class="btn btn-primary">Sign Up</a>
+            {% else %}
+                <span class="text-slate-300 text-sm hidden md:block">Welcome, {{ session.full_name }}!</span>
+                <a href="{{ url_for('main.profile') }}" class="text-teal-400 hover:text-teal-300 text-lg"><i class="fas fa-user-circle"></i></a>
+            {% endif %}
+        </div>
+    </nav>
+    
+    <main class="p-4 md:p-6 lg:p-8">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            showToast('{{ message }}', '{{ category }}' === 'error');
+                        });
+                    </script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if session.user_id %}</div>{% endif %}
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('aside');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block title %}Air Quality Mitigation Tips{% endblock %}
+
+{% block content %}
+<div class="animate-fade-in space-y-6">
+    <div class="glass-card p-6">
+        <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+            <i class="fas fa-lightbulb text-yellow-300"></i>
+            Air Quality Mitigation Tips
+        </h1>
+        <p class="text-slate-400 mt-2">
+            A comprehensive guide to protecting your health from air pollution.
+        </p>
+    </div>
+
+    <div class="glass-card p-4 mb-6">
+        <div class="flex flex-wrap items-center justify-center gap-4">
+            <span class="font-semibold text-slate-300">Filter by:</span>
+            <select id="category-filter" class="form-input w-auto bg-slate-800 text-sm py-2">
+                <option value="all">All Categories</option>
+                <option value="home">At Home</option>
+                <option value="personal">Personal</option>
+                <option value="transport">Commuting</option>
+                <option value="community">Community</option>
+            </select>
+            <select id="difficulty-filter" class="form-input w-auto bg-slate-800 text-sm py-2">
+                <option value="all">All Difficulties</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="space-y-4" id="tips-container">
+        {% set categories = {'home': 'At Home', 'personal': 'Personal & Outdoors', 'transport': 'Commuting', 'community': 'Community Action'} %}
+        
+        {% for category_key, category_title in categories.items() %}
+            <div class="space-y-4">
+                <h2 class="text-2xl font-bold text-teal-300 pl-2 border-l-4 border-teal-400">{{ category_title }}</h2>
+                {% for tip in tips if tip.category == category_key %}
+                <div class="glass-card tip-card" data-category="{{ tip.category }}" data-difficulty="{{ tip.difficulty }}" x-data="{ expanded: false }">
+                    <div @click="expanded = !expanded" class="p-6 cursor-pointer flex justify-between items-center">
+                        <h4 class="text-xl font-bold text-white">{{ tip.title }}</h4>
+                        <div class="flex items-center gap-4">
+                            <span class="capitalize text-sm hidden md:inline-block px-3 py-1 rounded-full 
+                                {% if tip.impact == 'high' %} bg-red-500/20 text-red-300 
+                                {% elif tip.impact == 'medium' %} bg-yellow-500/20 text-yellow-300
+                                {% else %} bg-green-500/20 text-green-300 {% endif %}">
+                                {{ tip.impact }} Impact
+                            </span>
+                            <i class="fas" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                        </div>
+                    </div>
+                    <div x-show="expanded" x-collapse class="px-6 pb-6">
+                        <p class="text-slate-300 border-t border-slate-700 pt-4">{{ tip.description }}</p>
+                        <div class="mt-4">
+                            <h5 class="font-semibold text-white mb-2">Details:</h5>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div class="bg-slate-800/50 p-3 rounded-lg">
+                                    <b class="text-sky-300 flex items-center gap-2"><i class="fas fa-smog"></i>Pollutants Targeted:</b>
+                                    <span class="block mt-1">{{ tip.pollutants_targeted }}</span>
+                                </div>
+                                <div class="bg-red-900/20 p-3 rounded-lg">
+                                     <b class="text-red-400 flex items-center gap-2"><i class="fas fa-heartbeat"></i>Related Health Risks:</b>
+                                     <span class="block mt-1">{{ tip.related_diseases }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const categoryFilter = document.getElementById('category-filter');
+        const difficultyFilter = document.getElementById('difficulty-filter');
+        const tipsContainer = document.getElementById('tips-container');
+        const allTips = Array.from(tipsContainer.getElementsByClassName('tip-card'));
+
+        function applyFilters() {
+            const selectedCategory = categoryFilter.value;
+            const selectedDifficulty = difficultyFilter.value;
+
+            allTips.forEach(tip => {
+                const tipCategory = tip.dataset.category;
+                const tipDifficulty = tip.dataset.difficulty;
+
+                const categoryMatch = (selectedCategory === 'all' || tipCategory === selectedCategory);
+                const difficultyMatch = (selectedDifficulty === 'all' || tipDifficulty === selectedDifficulty);
+
+                if (categoryMatch && difficultyMatch) {
+                    tip.style.display = '';
+                } else {
+                    tip.style.display = 'none';
+                }
+            });
+        }
+
+        categoryFilter.addEventListener('change', applyFilters);
+        difficultyFilter.addEventListener('change', applyFilters);
+    });
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+{% endblock %}

@@ -1,0 +1,10 @@
+Flask
+Flask-Cors
+Flask-SQLAlchemy
+Flask-Caching
+Werkzeug
+requests
+scikit-learn
+pandas
+joblib
+xgboost
