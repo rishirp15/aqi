@@ -11,14 +11,41 @@
                     Interactive Air Quality Map
                 </h1>
                 <p class="text-slate-400 mt-2">
-                    Hover over a circle for details or search for a city.
+                    Hover over a circle for AQI details or select a layer below for weather data.
                 </p>
             </div>
-            <div class="relative">
-                <input type="text" id="mapSearchInput" placeholder="Search for a city..." class="form-input w-full md:w-64">
-                <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            
+            <div class="flex items-center gap-4">
+                {# --- LAYER SELECTION DROPDOWN --- #}
+                <div class="relative">
+                    <select id="weatherLayerSelect" class="form-input w-48 text-sm">
+                        <option value="none" selected>Select Weather Layer</option>
+                        <option value="TA2">Air Temperature (°C)</option>
+                        <option value="WND">Wind Speed & Direction</option>
+                        <option value="CL">Cloudiness (%)</option>
+                        <option value="APM">Atmospheric Pressure (hPa)</option>
+                        <option value="PR0">Precipitation Intensity</option>
+                    </select>
+                </div>
+                
+                {# --- CITY SEARCH INPUT --- #}
+                <div class="relative flex items-center">
+                    <input type="text" id="mapSearchInput" placeholder="Search City..." class="form-input w-48 pr-10">
+                    <button id="mapSearchButton" class="absolute right-0 top-0 h-full px-3 text-slate-400 hover:text-teal-300">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </div>
+        </div>
+
+        {# --- DYNAMIC LEGEND CONTAINER --- #}
+        <div id="layer-legend" class="mt-4 p-2 rounded-lg bg-slate-800/50 text-xs hidden">
+            <p class="font-semibold text-slate-300 mb-1" id="legend-title"></p>
+            <div id="legend-scale" class="flex justify-between items-center h-4">
+                {# JS will render the color bar and labels here #}
             </div>
+        </div>
+        {# --- END DYNAMIC LEGEND CONTAINER --- #}
     </div>
     
     <div id="map" class="w-full h-[65vh] rounded-2xl shadow-2xl z-0"></div>

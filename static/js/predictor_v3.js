@@ -1,13 +1,13 @@
 // static/js/predictor_v3.js
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Get Elements ---
+    // --- Get Elements (Initialization) ---
     const predictForm = document.getElementById('predict-form');
     const predictionResultArea = document.getElementById('prediction-result-area'); // Container for all results
     const predictionResultText = document.getElementById('prediction-result'); // Text part
     const predictBtn = predictForm ? predictForm.querySelector('button[type="submit"]') : null;
     const predictBtnText = document.getElementById('predict-btn-text');
     const predictSpinner = document.getElementById('predict-spinner');
-    const useCurrentDataBtn = document.getElementById('use-current-data-btn');
+    const useCurrentDataBtn = document.getElementById('use-current-data-btn'); // Geolocation fill button
     const geolocateIcon = document.getElementById('geolocate-icon');
     const geolocateSpinner = document.getElementById('geolocate-spinner');
     const geolocateText = document.getElementById('geolocate-text');
@@ -16,107 +16,75 @@ document.addEventListener('DOMContentLoaded', () => {
     let resultGaugeChart = null;
     let contributionChart = null;
 
-    // --- Chart Drawing Functions ---
-
-    // Copied gaugeTextPlugin from dashboard.js - make sure getAqiCategoryInfo is available
+    // --- Chart Plugin Setup (Re-used from Dashboard) ---
     const gaugeTextPlugin = {
         id: 'gaugeText',
         beforeDraw: (chart) => {
-            if (chart.config.type !== 'doughnut' || chart.canvas.id !== 'resultGaugeChart') return; // Target new ID
+            // Draws AQI value and 'AQI' text inside the doughnut chart
+            if (chart.config.type !== 'doughnut' || chart.canvas.id !== 'resultGaugeChart') return;
             const { ctx, width, height } = chart;
             const aqi = chart.config.data.datasets?.[0]?.data?.[0];
             if (aqi === undefined || aqi === null) return;
-            const categoryInfo = getAqiCategoryInfo(aqi); // Assumes this function is available
+            const categoryInfo = getAqiCategoryInfo(aqi);
             ctx.restore();
             const fontSizeTitle = (height / 114).toFixed(2); const fontSizeCategory = (height / 220).toFixed(2);
-            // Color mapping needed if using Tailwind classes in categoryInfo
             const colorMap = {'text-green-400':'#34d399','text-yellow-400':'#f59e0b','text-orange-400':'#f97316','text-red-400':'#ef4444','text-purple-400':'#a855f7','text-rose-700':'#be123c','text-slate-400':'#9ca3af'};
             ctx.font = `bold ${fontSizeTitle}rem Poppins, sans-serif`; ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
-            ctx.fillStyle = colorMap[categoryInfo.textColor] || '#9ca3af'; // Use mapped color or default
+            ctx.fillStyle = colorMap[categoryInfo.textColor] || '#9ca3af';
             ctx.fillText(aqi, width / 2, height / 2 - 10);
             ctx.font = `600 ${fontSizeCategory}rem Poppins, sans-serif`; ctx.fillStyle = '#9ca3af';
-            ctx.fillText("AQI", width / 2, height / 2 + 20); // Always show AQI label here
+            ctx.fillText("AQI", width / 2, height / 2 + 20);
             ctx.save();
         }
     };
     // Register plugin safely
     if (typeof Chart !== 'undefined' && Chart.register) {
-         try {
-             Chart.register(gaugeTextPlugin);
-         } catch (e) {
-             console.warn("Could not register gaugeText plugin, might already be registered.", e);
-         }
-    } else {
-         console.error("Chart.js not loaded or register function unavailable.");
+         try { Chart.register(gaugeTextPlugin); } catch (e) { console.warn("Could not register gaugeText plugin.", e); }
     }
 
 
+    // --- Chart Drawing Functions ---
+
     function drawResultGauge(aqiValue) {
+        // Draws the circular AQI gauge chart (Doughnut chart)
         const gaugeCtx = document.getElementById('resultGaugeChart')?.getContext('2d');
-        if (!gaugeCtx) {
-            console.error("Result Gauge Chart canvas not found.");
-            return;
-        }
+        if (!gaugeCtx) { console.error("Result Gauge Chart canvas not found."); return; }
+        if (resultGaugeChart) resultGaugeChart.destroy(); // Destroy previous instance
 
-        if (resultGaugeChart) resultGaugeChart.destroy(); // Clear previous instance
-
-        // Handle N/A or invalid AQI for gauge display
         let displayAqi = 0;
-        let categoryInfo = getAqiCategoryInfo(-1); // Default to N/A category
+        let categoryInfo = getAqiCategoryInfo(-1);
         if (aqiValue !== null && aqiValue !== undefined && !isNaN(aqiValue)){
-            displayAqi = parseInt(aqiValue); // Ensure integer for gauge
+            displayAqi = parseInt(aqiValue);
             categoryInfo = getAqiCategoryInfo(displayAqi);
-        } else {
-             // If AQI is invalid, show an empty gauge or specific state
-             console.warn("Drawing gauge with N/A value.");
-             // Optional: Display "N/A" text using a different method if needed
         }
-
 
         resultGaugeChart = new Chart(gaugeCtx, {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    // Max value assumed 500 for visualization consistency
                     data: [displayAqi, Math.max(0, 500 - displayAqi)],
                     backgroundColor: [categoryInfo.chartColor, 'rgba(255, 255, 255, 0.1)'],
-                    borderWidth: 0,
-                    // circumference: 180, // Make it a half-circle
-                    // rotation: -90,     // Start at the bottom
+                    borderWidth: 0, cutout: '80%'
                 }]
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                // rotation: -90,      // For half circle
-                // circumference: 180, // For half circle
-                cutout: '80%',      // Doughnut thickness
-                plugins: {
-                    legend: { display: false },
-                    tooltip: { enabled: false },
-                    gaugeText: {} // Enable the custom plugin
-                }
-            }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false }, gaugeText: {} } }
         });
     }
 
     function drawContributionChart(subindices) {
+        // Draws the bar chart showing contribution of each pollutant (Sub-Index)
         const contribCtx = document.getElementById('contributionChart')?.getContext('2d');
-        if (!contribCtx) {
-            console.error("Contribution Chart canvas not found.");
-            return;
-        }
-
-        if (contributionChart) contributionChart.destroy(); // Clear previous instance
+        if (!contribCtx) { console.error("Contribution Chart canvas not found."); return; }
+        if (contributionChart) contributionChart.destroy(); // Destroy previous instance
 
         // Filter out zero/null/undefined and sort subindices for charting
         const chartData = Object.entries(subindices || {})
-                              .filter(([key, value]) => value && value > 0) // Only show pollutants with contribution > 0
+                              .filter(([key, value]) => value && value > 0)
                               .sort(([, a], [, b]) => b - a); // Sort descending by value
 
-        if (chartData.length === 0) {
-            console.log("No contributing subindices found to draw chart.");
-            // Optionally display a message on the canvas
+        if (chartData.length === 0) { 
+            console.log("No contributing subindices found to draw chart."); 
+            // Display a message on the canvas if no contribution is detected
             contribCtx.clearRect(0,0, contribCtx.canvas.width, contribCtx.canvas.height);
             contribCtx.fillStyle = '#9ca3af'; contribCtx.textAlign = 'center';
             contribCtx.fillText('No significant pollutant contribution detected', contribCtx.canvas.width / 2, contribCtx.canvas.height / 2);
@@ -126,11 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const labels = chartData.map(([key]) => key); // Pollutant names (e.g., PM2.5, O3)
         const values = chartData.map(([, value]) => value); // Sub-index values
 
-         // Define consistent colors or map dynamically if needed
         const backgroundColors = ['#38bdf8', '#8b5cf6', '#f97316', '#ef4444', '#eab308', '#22c55e', '#6366f1'].slice(0, labels.length);
 
         contributionChart = new Chart(contribCtx, {
-            type: 'bar', // Use vertical bars
+            type: 'bar', // Vertical bars
             data: {
                 labels: labels,
                 datasets: [{
@@ -142,16 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 }]
             },
             options: {
-                // indexAxis: 'y', // Switch back to vertical bars if preferred
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    title: { display: false }
-                },
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false }, title: { display: false } },
                 scales: {
-                    // x: { grid: { display: false } }, // Hide x-axis grid lines if vertical
-                    y: { title: { display: true, text: 'Calculated Sub-Index' }, beginAtZero: true } // Y-axis is value if vertical
+                    y: { title: { display: true, text: 'Calculated Sub-Index' }, beginAtZero: true } // Y-axis is value
                 }
             }
         });
@@ -159,39 +120,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Geolocation and Data Filling ---
     async function fillWithCurrentData() {
-        if (!navigator.geolocation) {
-            showToast("Geolocation is not supported by this browser.", true);
-            return;
-        }
+        // Fetches current pollutants using Geolocation and fills the form inputs
+        if (!navigator.geolocation) { showToast("Geolocation is not supported by this browser.", true); return; }
 
-        // Show loading state on button
-        if (!useCurrentDataBtn || !geolocateIcon || !geolocateSpinner || !geolocateText) {
-             console.error("Geolocation button elements missing.");
-             return; // Prevent errors if elements aren't found
-        }
-        useCurrentDataBtn.disabled = true;
-        geolocateIcon.classList.add('hidden');
-        geolocateSpinner.classList.remove('hidden');
-        geolocateText.textContent = 'Getting Location...';
+        // Set button to loading state
+        if (!useCurrentDataBtn || !geolocateIcon || !geolocateSpinner || !geolocateText) { console.error("Geolocation button elements missing."); return; }
+        useCurrentDataBtn.disabled = true; geolocateIcon.classList.add('hidden');
+        geolocateSpinner.classList.remove('hidden'); geolocateText.textContent = 'Getting Location...';
 
         try {
-            // Get position with timeout
+            // 1. Get coordinates
             const position = await new Promise((resolve, reject) => {
                 navigator.geolocation.getCurrentPosition(resolve, reject, {
                     timeout: 8000, enableHighAccuracy: false, maximumAge: 300000 // 5 min cache
                  });
             });
+            const lat = position.coords.latitude; const lon = position.coords.longitude;
+            geolocateText.textContent = 'Fetching Pollutants...'; console.log(`Geolocation acquired: ${lat}, ${lon}`);
 
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            geolocateText.textContent = 'Fetching Pollutants...';
-            console.log(`Geolocation acquired: ${lat}, ${lon}`);
-
-            // Fetch pollutant data from backend
-            const response = await fetch(`/api/current_pollutants?lat=${lat}&lon=${lon}`);
-            if (!response.ok) {
+            // 2. Fetch pollutant data from backend
+            // NOTE: The URL must be /api/current_pollutants (Flask strict_slashes=False should fix path issues)
+            const response = await fetch(`/api/current_pollutants?lat=${lat}&lon=${lon}`); 
+            if (!response.ok) { 
                 let errorMsg = `Failed to fetch pollutant data: ${response.statusText}`;
-                 try { const errorData = await response.json(); if (errorData.error) errorMsg = errorData.error; } catch(e){}
+                try { const errorData = await response.json(); if (errorData.error) errorMsg = errorData.error; } catch(e){}
                 throw new Error(errorMsg);
             }
             const data = await response.json();
@@ -200,16 +152,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             console.log("Fetched current pollutant data:", data);
 
-            // Fill the form fields
+            // 3. Fill the form fields
             const featuresToFill = ['PM2.5', 'PM10', 'NO', 'NO2', 'NOx', 'NH3', 'CO', 'SO2', 'O3', 'Benzene', 'Toluene', 'Xylene'];
             let filledCount = 0;
             featuresToFill.forEach(feature => {
                 const input = predictForm.elements[feature]; // Access form elements by name
                 if (input) {
                     const value = data[feature];
-                    // Use empty string for null/undefined, otherwise format number if it's numeric
                     if (value === null || value === undefined) {
-                        input.value = '';
+                        input.value = ''; // Leave blank if data is null/missing
                     } else {
                          // Attempt to format, fallback to raw value if not a number
                          try {
@@ -220,8 +171,6 @@ document.addEventListener('DOMContentLoaded', () => {
                          }
                     }
                     input.style.borderColor = ''; // Clear error styling
-                } else {
-                    console.warn(`Input field for ${feature} not found in form.`);
                 }
             });
 
@@ -251,20 +200,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach listener to the geolocation button
     if (useCurrentDataBtn) {
         useCurrentDataBtn.addEventListener('click', fillWithCurrentData);
-    } else {
-        console.warn("Button 'use-current-data-btn' not found.");
     }
 
-
     // --- Current AQI Prediction Form Submission Logic ---
-    if (predictForm && predictBtn && predictBtnText && predictSpinner && predictionResultText && predictionResultArea) {
-        console.log("Predict form elements found. Adding submit listener.");
-
+    if (predictForm && predictBtn && predictionResultArea) { // Simplified element check
+        
         predictForm.addEventListener('submit', async (e) => {
             e.preventDefault(); // Prevent default page reload
             console.log("Predict form submitted.");
 
-            // Validation
+            // 1. Validation (Check if all required fields are filled)
             let isValid = true;
             const requiredInputs = predictForm.querySelectorAll('input[type="number"][required]');
             requiredInputs.forEach((input) => {
@@ -275,38 +220,31 @@ document.addEventListener('DOMContentLoaded', () => {
                     if(input) input.style.borderColor = '';
                 }
             });
-            if (!isValid) {
-                showToast('Please fill all fields with valid numbers.', true);
-                return;
-            }
-            console.log("Validation passed.");
-
-            // UI state: loading
+            if (!isValid) { showToast('Please fill all fields with valid numbers.', true); return; }
+            
+            // 2. UI state: loading
             predictBtn.disabled = true; predictBtnText.classList.add('hidden');
             predictSpinner.classList.remove('hidden'); predictionResultArea.classList.add('hidden');
 
             try {
-                // Collect data
+                // 3. Collect data and send to Flask API for prediction
                 const formData = new FormData(predictForm); const dataObject = {};
                 const features = ['PM2.5', 'PM10', 'NO', 'NO2', 'NOx', 'NH3', 'CO', 'SO2', 'O3', 'Benzene', 'Toluene', 'Xylene'];
                 features.forEach(feature => { dataObject[feature] = formData.get(feature); });
-                console.log("Sending data for prediction:", dataObject);
 
-                // Fetch prediction AND subindices
                 const response = await fetch('/api/predict_aqi', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(dataObject) });
                 const data = await response.json();
                 if (!response.ok || !data.success) { throw new Error(data.error || 'Prediction request failed.'); }
 
-                // Display results
+                // 4. Draw Results (Gauge and Contribution Chart)
                 const aqi = data.predicted_aqi;
                 const categoryInfo = data.category_info;
                 const subindices = data.subindices;
 
-                // Update text result
+                // Update text summary
                 predictionResultText.innerHTML = `<span class="text-2xl font-semibold ${categoryInfo.textColor}">${categoryInfo.category}</span><br><span class="text-sm text-slate-400">${categoryInfo.description}</span>`;
                 predictionResultText.className = `mt-4 text-center p-4 rounded-lg border-t-4 ${categoryInfo.borderColor} ${categoryInfo.bgColor}`;
 
-                // Draw Charts
                 drawResultGauge(aqi);
                 drawContributionChart(subindices);
 
@@ -315,45 +253,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             } catch (error) {
                  console.error("Prediction submit error:", error);
+                 // Display error message and destroy charts
                  predictionResultText.textContent = `Error: ${error.message}`;
                  predictionResultText.className = 'mt-4 text-center p-4 rounded-lg border-l-4 bg-red-500/20 text-red-300 border-red-500';
-                 predictionResultArea.classList.remove('hidden'); // Show error area
-                 // Destroy charts on error
+                 predictionResultArea.classList.remove('hidden');
                  if (resultGaugeChart) resultGaugeChart.destroy(); resultGaugeChart = null;
                  if (contributionChart) contributionChart.destroy(); contributionChart = null;
-                 // Clear canvases explicitly
-                 const gaugeCanvas = document.getElementById('resultGaugeChart');
-                 const contribCanvas = document.getElementById('contributionChart');
-                 if(gaugeCanvas) gaugeCanvas.getContext('2d').clearRect(0,0, gaugeCanvas.width, gaugeCanvas.height);
-                 if(contribCanvas) contribCanvas.getContext('2d').clearRect(0,0, contribCanvas.width, contribCanvas.height);
 
             } finally {
+                 // 5. Final state reset
                  predictBtn.disabled = false; predictBtnText.classList.remove('hidden');
                  predictSpinner.classList.add('hidden');
-                 console.log("Prediction process finished.");
             }
-        }); // End event listener
+        }); // End prediction event listener
 
     } else {
-         console.warn("Could not initialize prediction form listener. Check element IDs:", {
+         console.warn("Could not initialize prediction form listener. Check HTML IDs:", {
              predictForm: !!predictForm, predictBtn: !!predictBtn, predictBtnText: !!predictBtnText,
              predictSpinner: !!predictSpinner, predictionResultText: !!predictionResultText, predictionResultArea: !!predictionResultArea
          });
     }
 
-    // --- Ensure necessary functions/variables are available ---
-    // Make sure getAqiCategoryInfo is available (should be from ml_handler via template or global scope)
+    // Fallback checks to ensure required global functions are present
     if (typeof getAqiCategoryInfo === 'undefined') {
-        console.error('getAqiCategoryInfo function is not defined. Ensure it is available globally.');
-        // Define a minimal fallback if absolutely necessary
+        console.error('getAqiCategoryInfo function is not defined.');
         window.getAqiCategoryInfo = (aqi) => ({ category: 'N/A', description: '', textColor: 'text-slate-400', borderColor: 'border-slate-500', bgColor: 'bg-slate-500/10', chartColor: '#64748b' });
     }
-    // Make sure showToast is available (should be from main.js)
     if (typeof showToast === 'undefined') {
-        console.warn('showToast function is not defined. Ensure main.js is loaded before predictor_v3.js.');
-        window.showToast = (message, isError = false) => {
-            alert(`Toast (${isError ? 'Error' : 'Info'}): ${message}`);
-        };
+        console.warn('showToast function is not defined. Ensure main.js is loaded.');
+        window.showToast = (message, isError = false) => { alert(`Toast (${isError ? 'Error' : 'Info'}): ${message}`); };
     }
 
 }); // End DOMContentLoaded
