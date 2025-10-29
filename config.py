@@ -6,7 +6,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # NEW: Your API key for all OpenWeather APIs
-    OPENWEATHER_API_KEY = '924cd14fd135397ea93575f2d0d32709'
+    OPENWEATHER_API_KEY = 'Enter API Key'
     
     # NEW: Geocoding API endpoint
     GEOCODING_API_URL = "http://api.openweathermap.org/geo/1.0/direct"
