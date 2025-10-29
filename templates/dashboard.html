@@ -2,97 +2,136 @@
 {% block title %}Dashboard - {{ city }}{% endblock %}
 
 {% block content %}
-<div class="animate-fade-in space-y-8">
-    <div class="glass-card p-6">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div>
-                <h1 class="text-3xl font-bold text-white">Dashboard</h1>
-                <p class="text-slate-400">Personalized tips to reduce your pollution exposure in <span class="font-bold text-teal-400" id="dashboard-city-name">{{ city }}</span></p>
-            </div>
+<div class="space-y-6 animate-fade-in">
 
-            <div class="flex items-center gap-2 flex-wrap justify-center w-full md:w-auto">
-                <div class="relative w-full md:w-64">
-                    <input type="text" id="cityInput" value="{{ city }}" placeholder="Enter city..." class="form-input" autocomplete="off">
-                </div>
-                <button id="updateBtn" onclick="changeCity()" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                <button onclick="savePreferredCity()" title="Set as default city" class="btn btn-secondary"><i class="fas fa-save"></i></button>
-                <button onclick="exportData()" title="Export data as CSV" class="btn btn-secondary bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
-                    <i class="fas fa-file-download"></i>
+    <div class="glass-card p-4 relative">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+            <h1 class="text-2xl font-bold text-white">
+                Dashboard for <span id="dashboard-city-name">{{ city }}</span>
+            </h1>
+            <div class="flex items-center gap-2 w-full md:w-auto relative" style="z-index: 100;">
+                <input type="text" id="cityInput" value="{{ city }}" placeholder="Enter city name..." class="form-input flex-grow">
+                <div id="suggestionsDropdownDashboard" class="autocomplete-dropdown mt-1 w-full"></div>
+                <button id="updateBtn" class="btn btn-secondary p-3" title="Search City">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button id="saveCityBtn" class="btn btn-secondary p-3" title="Save as Preferred City">
+                    <i class="fas fa-heart"></i>
+                </button>
+                 <button id="exportBtn" class="btn btn-secondary p-3" title="Export Current Data">
+                    <i class="fas fa-download"></i>
                 </button>
             </div>
         </div>
+        <p id="error-msg" class="text-red-400 text-sm mt-2 hidden"></p>
     </div>
 
-    <div class="glass-card p-3">
-        <div id="context-selector" class="flex flex-wrap justify-center items-center gap-2">
-            <span class="font-semibold text-slate-300 mr-2">Show tips for:</span>
-            <button data-context="home" class="context-btn active"><i class="fas fa-home mr-2"></i>At Home</button>
-            <button data-context="outdoors" class="context-btn"><i class="fas fa-tree mr-2"></i>Outdoors</button>
-            <button data-context="commuting" class="context-btn"><i class="fas fa-car mr-2"></i>Commuting</button>
+    <div id="loading" class="text-center py-10 hidden">
+        <i class="fas fa-spinner fa-spin text-4xl text-teal-400"></i>
+        <p class="mt-2 text-slate-400">Loading data...</p>
+    </div>
+
+    <div id="dashboard-content" class="space-y-6">
+
+        <div id="health-summary-card" style="position: relative; z-index: 1;" class="glass-card p-6 hidden flex items-center justify-center gap-6 text-center animate-fade-in">
+             <span id="summary-city-name" class="hidden"></span>
+             <div id="summary-content" class="flex items-center justify-center gap-6">
+             </div>
         </div>
-    </div>
 
-    <div id="health-summary-card" class="glass-card p-6 text-center hidden animate-fade-in">
-        <h2 class="text-2xl font-bold text-white mb-2">Health Summary for <span id="summary-city-name"></span></h2>
-        <div id="summary-content" class="flex flex-col md:flex-row items-center justify-center gap-4">
+
+        <h2 class="text-xl font-semibold text-teal-300 pl-2 border-l-4 border-teal-400">Current Weather Details</h2>
+        <div id="weather-section" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div id="weather-card-temp" class="glass-card p-4 space-y-2">Loading...</div>
+            <div id="weather-card-wind" class="glass-card p-4 space-y-2">Loading...</div>
+            <div id="weather-card-misc" class="glass-card p-4 space-y-2">Loading...</div>
+            <div id="weather-card-sun" class="glass-card p-4 space-y-2">Loading...</div>
         </div>
-    </div>
 
-    <div id="loading" class="hidden flex items-center justify-center gap-3 text-lg text-teal-400 p-4 glass-card">
-        <i class="fas fa-spinner fa-spin"></i>
-        <span>Fetching latest data...</span>
-    </div>
-    <div id="error-msg" class="hidden text-red-400 bg-red-900/30 p-4 rounded-xl text-center"></div>
+        <h2 class="text-xl font-semibold text-teal-300 pl-2 border-l-4 border-teal-400">Air Pollutant Levels</h2>
+        <div id="aqi-section" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div class="col-span-2 md:col-span-3 lg:col-span-6 text-center text-slate-400 p-4">Loading Pollutants...</div>
+        </div>
+        <h2 class="text-xl font-semibold text-teal-300 pl-2 border-l-4 border-teal-400">Hourly Weather Forecast</h2>
+        <div id="hourly-weather-cards-section" class="flex space-x-3 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800/50">
+            <div class="text-center text-slate-400 p-4 min-w-full">Loading Hourly Forecast...</div>
+        </div>
+        <h2 class="text-xl font-semibold text-teal-300 pl-2 border-l-4 border-teal-400">5-Day Weather Forecast</h2>
+        <div id="forecast-section" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            <div class="col-span-full text-center text-slate-400 p-4">Loading Forecast...</div>
+        </div>
 
-    <div id="dashboard-content" class="hidden">
-        <section id="aqi-section" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8"></section>
-
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <div class="lg:col-span-1 glass-card p-6 space-y-4">
-                <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fas fa-sun text-yellow-300"></i>Current Weather</h3>
-                <div id="weather-section" class="space-y-3"></div>
-            </div>
-            <div class="lg:col-span-2 glass-card p-6">
-                <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fas fa-calendar-week text-sky-300"></i>5-Day Forecast</h3>
-                <div id="forecast-section" class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
-                    </div>
-            </div>
-            </section>
-
-        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="glass-card p-6"><div class="chart-container"><canvas id="lineChart"></canvas></div></div>
-            <div class="glass-card p-6"><div class="chart-container"><canvas id="barChart"></canvas></div></div>
-            <div class="glass-card p-6"><div class="chart-container"><canvas id="pieChart"></canvas></div></div>
-            <div class="glass-card p-6"><div class="chart-container"><canvas id="gaugeChart"></canvas></div></div>
-            <div class="glass-card p-6"><div class="chart-container"><canvas id="radarChart"></canvas></div></div>
-            <div class="glass-card p-6">
-                <h3 class="text-xl font-bold text-white flex items-center gap-2"><i class="fas fa-lightbulb text-emerald-300"></i>Personalized Health Tips</h3>
-                <div id="tips-section" class="space-y-3 mt-4">
-                    {% for tip in tips %}
-                    <div class="p-3 rounded-lg border-l-4 border-emerald-500 bg-emerald-500/10">
-                        <h4 class="font-semibold text-white text-sm">{{ tip.title }}</h4>
-                        <p class="text-xs text-slate-300">{{ tip.description }}</p>
-                    </div>
-                    {% else %}
-                    <p class="text-slate-400 text-sm">No tips available for the current conditions.</p>
-                    {% endfor %}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass-card p-4">
+                <h3 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                    <i class="fas fa-flag text-orange-400"></i> Top Cities AQI - India 🇮🇳
+                </h3>
+                <div id="top-indian-cities-list" class="space-y-2 max-h-72 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-700/50">                    
+                    <p class="text-slate-400 text-sm p-4 text-center">Loading Indian cities data...</p>
                 </div>
             </div>
-        </section>
-    </div>
-</div>
+
+            <div class="glass-card p-4">
+                 <h3 class="text-lg font-semibold text-white mb-3 flex items-center gap-2">
+                    <i class="fas fa-globe-americas text-sky-400"></i> Top Cities AQI - World 🌍
+                </h3>
+                <div id="top-world-cities-list" class="space-y-2 max-h-72 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-700/50">
+                     <p class="text-slate-400 text-sm p-4 text-center">Loading world cities data...</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass-card p-4">
+            <h3 class="text-lg font-semibold text-white mb-3">
+                Personalized tips to reduce your pollution exposure in <span id="tips-heading-city-name" class="text-teal-300">{{ city }}</span>:
+            </h3>
+            <div id="context-selector" class="flex flex-wrap items-center gap-2 mb-4">
+                <span class="text-sm text-slate-400 mr-2">Show tips for:</span>
+                <button class="context-btn" data-context="home">
+                    <i class="fas fa-home mr-1"></i> At Home
+                </button>
+                <button class="context-btn" data-context="outdoors">
+                    <i class="fas fa-walking mr-1"></i> Outdoors
+                </button>
+                <button class="context-btn" data-context="commuting">
+                    <i class="fas fa-car mr-1"></i> Commuting
+                </button>
+            </div>
+            <div id="tips-section" class="space-y-2 max-h-60 overflow-y-auto pr-2">
+                <div class="text-slate-400 text-sm">Loading tips...</div>
+            </div>
+        </div>
+
+         <h2 class="text-xl font-semibold text-teal-300 pl-2 border-l-4 border-teal-400">Data Visualization</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass-card p-4">
+                <h3 class="text-lg font-semibold text-center mb-2">AQI Trend (Last 24h)</h3>
+                <div class="chart-container"><canvas id="lineChart"></canvas></div>
+            </div>
+            <div class="glass-card p-4">
+                <h3 class="text-lg font-semibold text-center mb-2">Current AQI Gauge</h3>
+                <div class="chart-container"><canvas id="gaugeChart"></canvas></div>
+            </div>
+            <div class="glass-card p-4">
+                <h3 class="text-lg font-semibold text-center mb-2">Pollutant Levels (µg/m³)</h3>
+                <div class="chart-container"><canvas id="barChart"></canvas></div>
+            </div>
+             <div class="glass-card p-4">
+                <h3 class="text-lg font-semibold text-center mb-2">Pollutant Composition</h3>
+                 <div class="chart-container"><canvas id="pieChart"></canvas></div>
+            </div>
+             <div class="glass-card p-4 lg:col-span-2"> <h3 class="text-lg font-semibold text-center mb-2">Hourly Forecast (Next ~24h)</h3>
+                <div class="chart-container h-[400px]"><canvas id="hourlyForecastChart"></canvas></div>
+            </div>
+        </div>
+
+    </div> </div>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        updateDashboard('{{ city }}');
-        setInterval(() => {
-            const currentCity = document.getElementById('cityInput').value || '{{ city }}';
-            updateDashboard(currentCity);
-            showToast('Data automatically refreshed!', false);
-        }, 300000); // Auto-refresh every 5 minutes
-    });
+    window.DEFAULT_CITY = "{{ session.get('city', 'Delhi') }}"; // Use session's city as default
+    window.PREFERRED_CITY = "{{ session.get('city', '') }}"; // Pass preferred city if needed for logic
 </script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %}

@@ -12,12 +12,14 @@
         <p class="text-lg md:text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
             Get live air quality index (AQI) data, weather updates, and actionable health tips for cities around the world.
         </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-2 max-w-lg mx-auto">
-            <input type="text" id="citySearchInput" placeholder="Enter a city name..." class="form-input flex-grow">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-2 max-w-lg mx-auto relative">
+            <input type="text" id="citySearchInput" placeholder="Enter a city name..." class="form-input flex-grow" autocomplete="off"> 
             <button onclick="searchCity()" class="btn btn-primary w-full sm:w-auto">
                 <i class="fas fa-search"></i>
                 <span>Check AQI</span>
             </button>
+            <div id="suggestionsDropdownIndex" class="autocomplete-dropdown mt-1 text-left">
+            </div>
         </div>
     </section>
 
@@ -62,13 +64,38 @@
 
 {% block scripts %}
 <script>
+    // Keep existing searchCity function
     function searchCity() {
-        const city = document.getElementById('citySearchInput').value.trim();
+        const cityInput = document.getElementById('citySearchInput');
+        const city = cityInput ? cityInput.value.trim() : ''; // Add check for element
         if (city) {
             window.location.href = `/dashboard?city=${encodeURIComponent(city)}`;
         } else {
-            showToast('Please enter a city name.', true);
+            // Use showToast if available (from main.js)
+            if(typeof showToast !== 'undefined') {
+                showToast('Please enter a city name.', true);
+            } else {
+                alert('Please enter a city name.'); // Fallback alert
+            }
         }
     }
+
+    // --- Initialize Autocomplete for Index Page ---
+     document.addEventListener('DOMContentLoaded', () => {
+         // Check if the required function exists (loaded from main.js)
+         if (typeof initAutocomplete !== 'undefined') {
+             initAutocomplete('citySearchInput', 'suggestionsDropdownIndex', (selectedCity) => {
+                 // Callback when a suggestion is selected.
+                 // We set the input value in initAutocomplete,
+                 // User can then click the "Check AQI" button.
+                 console.log("Index autocomplete selected:", selectedCity);
+                 // Optional: Automatically trigger search after selection?
+                 // searchCity();
+             });
+         } else {
+             console.error("initAutocomplete function not found on index page. Ensure main.js is loaded correctly before this script block.");
+         }
+     });
+    // --- ---
 </script>
 {% endblock %}

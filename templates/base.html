@@ -19,10 +19,11 @@
         <div class="p-6">
             <a href="{{ url_for('main.dashboard') }}" class="text-2xl font-bold mb-8 text-teal-400 flex items-center gap-2"><i class="fas fa-wind"></i>AirWatch</a>
             <ul class="space-y-3 mt-8">
+                <li><a href="{{ url_for('main.about_aqi') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-info-circle w-6 text-center mr-3 text-teal-400"></i>What is AQI?</a></li>
+                <li><a href="{{ url_for('main.pollutant_guide') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white"><i class="fas fa-atom w-6 text-center mr-3 text-teal-400"></i>Pollutant Guide</a></li>
                 <li><a href="{{ url_for('main.dashboard') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-chart-line w-6 text-center mr-3 text-teal-400"></i>Dashboard</a></li>
                 <li><a href="{{ url_for('main.map_view') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-map-marked-alt w-6 text-center mr-3 text-teal-400"></i>Map View</a></li>
                 <li><a href="{{ url_for('main.tips') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-lightbulb w-6 text-center mr-3 text-teal-400"></i>Tips</a></li>
-                <li><a href="{{ url_for('main.pollutant_guide') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white"><i class="fas fa-atom w-6 text-center mr-3 text-teal-400"></i>Pollutant Guide</a></li>
                 <li>
                     <a href="{{ url_for('main.predictor') }}" class="flex items-center justify-between p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200">
                         <span class="flex items-center">
@@ -31,7 +32,6 @@
                         <span class="text-xs bg-sky-500 text-white font-bold px-2 py-0.5 rounded-full">NEW</span>
                     </a>
                 </li>
-                <li><a href="{{ url_for('main.about_aqi') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-info-circle w-6 text-center mr-3 text-teal-400"></i>What is AQI?</a></li>
                 <li><a href="{{ url_for('main.profile') }}" class="flex items-center p-3 rounded-lg text-slate-300 hover:bg-teal-500/20 hover:text-white transition-colors duration-200"><i class="fas fa-user-circle w-6 text-center mr-3 text-teal-400"></i>Profile</a></li>
                 <li class="pt-4"><a href="{{ url_for('auth.logout') }}" class="flex items-center p-3 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors duration-200"><i class="fas fa-sign-out-alt w-6 text-center mr-3"></i>Logout</a></li>
             </ul>

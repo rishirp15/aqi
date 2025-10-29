@@ -26,5 +26,6 @@
 {% endblock %}
 
 {% block scripts %}
+<script> window.OPENWEATHER_API_KEY = "{{ config.OPENWEATHER_API_KEY }}"; </script>
 <script src="{{ url_for('static', filename='js/map.js') }}"></script>
 {% endblock %}

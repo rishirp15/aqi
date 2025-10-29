@@ -92,3 +92,4 @@ def pollutant_guide():
     if 'user_id' not in session:
         return redirect(url_for('auth.login'))
     return render_template('pollutant_guide.html')
+

@@ -3,108 +3,109 @@
 
 {% block content %}
 <div class="animate-fade-in space-y-8">
-    <div class="glass-card p-6">
-        <h1 class="text-3xl font-bold text-white flex items-center gap-3">
-            <i class="fas fa-brain text-sky-400"></i>
-            AQI Prediction & Forecasting
-        </h1>
-        <p class="text-slate-400 mt-2">
-            Use our machine learning models to predict current AQI or forecast for the week ahead.
-        </p>
+    <div class="glass-card p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-white flex items-center gap-3">
+                <i class="fas fa-calculator text-teal-300"></i>
+                AQI Prediction
+            </h1>
+            <p class="text-slate-400 mt-2">
+                Predict AQI based on pollutant levels using our Random Forest model.
+            </p>
+        </div>
+        <button id="use-current-data-btn" class="btn btn-secondary whitespace-nowrap">
+            <i id="geolocate-icon" class="fas fa-map-marker-alt"></i>
+            <i id="geolocate-spinner" class="fas fa-spinner fa-spin hidden"></i>
+            <span id="geolocate-text">Use My Location Data</span>
+        </button>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="glass-card p-6">
-            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <i class="fas fa-calculator text-teal-300"></i> Predict Current AQI
-            </h2>
-            <form id="predict-form" class="space-y-4">
-                <div>
-                    <label class="block text-slate-300 font-medium mb-2">Select City</label>
-                    <select name="City" required class="form-input">
-                        <option value="" disabled selected>-- Choose a City --</option>
-                        <option value="Aizawl">Aizawl</option>
-                        <option value="Amaravati">Amaravati</option>
-                        <option value="Amritsar">Amritsar</option>
-                        <option value="Bengaluru">Bengaluru</option>
-                        <option value="Bhopal">Bhopal</option>
-                        <option value="Brajrajnagar">Brajrajnagar</option>
-                        <option value="Chandigarh">Chandigarh</option>
-                        <option value="Chennai">Chennai</option>
-                        <option value="Coimbatore">Coimbatore</option>
-                        <option value="Delhi">Delhi</option>
-                        <option value="Ernakulam">Ernakulam</option>
-                        <option value="Gurugram">Gurugram</option>
-                        <option value="Guwahati">Guwahati</option>
-                        <option value="Hyderabad">Hyderabad</option>
-                        <option value="Jaipur">Jaipur</option>
-                        <option value="Jorapokhar">Jorapokhar</option>
-                        <option value="Kochi">Kochi</option>
-                        <option value="Kolkata">Kolkata</option>
-                        <option value="Lucknow">Lucknow</option>
-                        <option value="Mumbai">Mumbai</option>
-                        <option value="Patna">Patna</option>
-                        <option value="Shillong">Shillong</option>
-                        <option value="Talcher">Talcher</option>
-                        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
-                        <option value="Visakhapatnam">Visakhapatnam</option>
-                    </select>
+    <div class="flex justify-center">
+        <div class="w-full max-w-2xl lg:max-w-3xl">
+            <div class="glass-card p-6">
+                <form id="predict-form" class="space-y-6"> 
+                    <fieldset class="border border-slate-700 rounded-lg p-4">
+                        <legend class="px-2 text-slate-300 font-medium">Particulates</legend>
+                        <div class="grid grid-cols-2 gap-4">
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-smog w-4 text-center"></i> PM2.5 <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="PM2.5" placeholder="e.g., 25.5" required class="form-input mt-1">
+                            </label>
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-smog w-4 text-center"></i> PM10 <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="PM10" placeholder="e.g., 55.0" required class="form-input mt-1">
+                            </label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="border border-slate-700 rounded-lg p-4">
+                        <legend class="px-2 text-slate-300 font-medium">Nitrogen Oxides & Ammonia</legend>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-leaf w-4 text-center"></i> NO <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="NO" placeholder="e.g., 10.1" required class="form-input mt-1">
+                            </label>
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-industry w-4 text-center"></i> NO2 <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="NO2" placeholder="e.g., 22.3" required class="form-input mt-1">
+                            </label>
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-atom w-4 text-center"></i> NOx <span class="text-xs">(ppb?)</span></span>
+                                <input type="number" step="any" min="0" name="NOx" placeholder="e.g., 35.0" required class="form-input mt-1">
+                            </label>
+                             <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-leaf w-4 text-center"></i> NH3 <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="NH3" placeholder="e.g., 8.5" required class="form-input mt-1">
+                            </label>
+                        </div>
+                    </fieldset>
+                    <fieldset class="border border-slate-700 rounded-lg p-4">
+                        <legend class="px-2 text-slate-300 font-medium">Other Gases & Organics</legend>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-fire-alt w-4 text-center"></i> CO <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="CO" placeholder="e.g., 900" required class="form-input mt-1">
+                            </label>
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-flask w-4 text-center"></i> SO2 <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="SO2" placeholder="e.g., 5.5" required class="form-input mt-1">
+                            </label>
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-sun w-4 text-center"></i> O3 <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="O3" placeholder="e.g., 40.0" required class="form-input mt-1">
+                            </label>
+                             <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-vial w-4 text-center"></i> Benzene <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="Benzene" placeholder="e.g., 1.5" required class="form-input mt-1">
+                            </label>
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-vial w-4 text-center"></i> Toluene <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="Toluene" placeholder="e.g., 8.0" required class="form-input mt-1">
+                            </label>
+                            <label class="block">
+                                <span class="text-slate-400 text-sm flex items-center gap-1"><i class="fas fa-vial w-4 text-center"></i> Xylene <span class="text-xs">(µg/m³)</span></span>
+                                <input type="number" step="any" min="0" name="Xylene" placeholder="e.g., 2.0" required class="form-input mt-1">
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <button type="submit" class="w-full btn btn-primary py-3">
+                        <span id="predict-btn-text">Predict AQI</span>
+                        <i id="predict-spinner" class="fas fa-spinner fa-spin hidden"></i>
+                    </button>
+                </form>
+                <div id="prediction-result-area" class="mt-8 space-y-6 hidden"> 
+                     <h3 class="text-xl font-bold text-white text-center">Prediction Result</h3>
+                     <div class="glass-card p-4 max-w-xs mx-auto">
+                         <div class="chart-container h-[250px]"><canvas id="resultGaugeChart"></canvas></div>
+                     </div>
+                    <div id="prediction-result" class="text-center p-4 rounded-lg"></div>
+                     <div class="glass-card p-4">
+                         <h4 class="text-lg font-semibold text-center mb-2 text-white">Pollutant Sub-Index Contribution</h4>
+                         <p class="text-xs text-slate-400 text-center mb-3">(Higher bar indicates greater contribution to the overall AQI)</p>
+                         <div class="chart-container h-[300px]"><canvas id="contributionChart"></canvas></div>
+                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <input type="number" step="any" name="PM2.5" placeholder="PM2.5" required class="form-input">
-                    <input type="number" step="any" name="PM10" placeholder="PM10" required class="form-input">
-                    <input type="number" step="any" name="NO" placeholder="NO" required class="form-input">
-                    <input type="number" step="any" name="NO2" placeholder="NO2" required class="form-input">
-                    <input type="number" step="any" name="NOx" placeholder="NOx" required class="form-input">
-                    <input type="number" step="any" name="NH3" placeholder="NH3" required class="form-input">
-                    <input type="number" step="any" name="CO" placeholder="CO" required class="form-input">
-                    <input type="number" step="any" name="SO2" placeholder="SO2" required class="form-input">
-                    <input type="number" step="any" name="Toluene" placeholder="Toluene" required class="form-input">
-                </div>
-
-                <button type="submit" class="w-full btn btn-primary py-3">
-                    <span id="predict-btn-text">Predict AQI</span>
-                    <i id="predict-spinner" class="fas fa-spinner fa-spin hidden"></i>
-                </button>
-            </form>
-            <div id="prediction-result" class="mt-4 text-center p-4 rounded-lg hidden"></div>
-        </div>
-
-        <div class="glass-card p-6">
-            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <i class="fas fa-chart-line text-purple-300"></i> Forecast Next 7 Days
-            </h2>
-            <p class="text-slate-400 text-sm mb-4">Enter the AQI for the last 7 days to generate a forecast.</p>
-            
-            <form id="forecast-form" class="space-y-4">
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <input type="number" step="any" name="lag_1" placeholder="AQI Yesterday" required class="form-input">
-                    <input type="number" step="any" name="lag_2" placeholder="AQI 2 Days Ago" required class="form-input">
-                    <input type="number" step="any" name="lag_3" placeholder="AQI 3 Days Ago" required class="form-input">
-                    <input type="number" step="any" name="lag_4" placeholder="AQI 4 Days Ago" required class="form-input">
-                    <input type="number" step="any" name="lag_5" placeholder="AQI 5 Days Ago" required class="form-input">
-                    <input type="number" step="any" name="lag_6" placeholder="AQI 6 Days Ago" required class="form-input">
-                    <input type="number" step="any" name="lag_7" placeholder="AQI 7 Days Ago" required class="form-input">
-                </div>
-                <button type="submit" class="w-full btn btn-secondary bg-purple-500/20 text-purple-300 border-purple-500/40">
-                    Get Forecast
-                </button>
-            </form>
-        
-            <div class="mt-4">
-                <div id="forecast-spinner" class="text-center p-4 hidden"><i class="fas fa-spinner fa-spin text-2xl text-purple-300"></i></div>
-                <table class="w-full text-left hidden" id="forecast-table-container">
-                    <thead class="border-b border-slate-600">
-                        <tr>
-                            <th class="p-2">Date</th>
-                            <th class="p-2">Predicted AQI</th>
-                            <th class="p-2">Category</th>
-                        </tr>
-                    </thead>
-                    <tbody id="forecast-table-body"></tbody>
-                </table>
-                <div class="mt-4 chart-container h-[250px]"><canvas id="forecastChart"></canvas></div>
             </div>
         </div>
     </div>
@@ -112,5 +113,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/predictor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/predictor_v3.js') }}"></script>
 {% endblock %}

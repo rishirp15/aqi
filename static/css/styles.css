@@ -1,21 +1,23 @@
+/* static/css/styles.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #0f172a;
-    color: #e2e8f0;
+    background: #0f172a; /* Dark slate background */
+    color: #e2e8f0; /* Light slate text */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
 /* Glassmorphism Card */
 .glass-card {
-    background: rgba(30, 41, 59, 0.5);
+    background: rgba(30, 41, 59, 0.5); /* Semi-transparent darker slate */
     backdrop-filter: blur(10px);
-    border-radius: 1.5rem;
+    border-radius: 1.5rem; /* More rounded corners */
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: visible;
 }
 
 .glass-card:hover {
@@ -40,7 +42,7 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(90deg, #14b8a6, #0d9488);
+    background: linear-gradient(90deg, #14b8a6, #0d9488); /* Teal gradient */
     color: white;
     box-shadow: 0 4px 15px rgba(20, 184, 166, 0.2);
 }
@@ -51,8 +53,8 @@ body {
 }
 
 .btn-secondary {
-    background: rgba(56, 189, 248, 0.2);
-    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.2); /* Light blue transparent */
+    color: #38bdf8; /* Light blue text */
     border: 1px solid rgba(56, 189, 248, 0.4);
 }
 
@@ -64,24 +66,25 @@ body {
 /* Form Inputs */
 .form-input {
     width: 100%;
-    padding: 1rem;
+    padding: 0.75rem 1rem; /* Adjust padding if needed */
     border-radius: 0.75rem;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #f1f5f9;
+    color: #f1f5f9; /* Light text */
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    line-height: 1.5; /* Ensure text fits vertically */
 }
 
 .form-input:focus {
     outline: none;
-    border-color: #14b8a6;
+    border-color: #14b8a6; /* Teal focus border */
     box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.3);
 }
 
-/* Fix for light text on light dropdown background */
+/* Fix for light text on light dropdown background in some browsers */
 .form-input option {
-    background: white;
-    color: #0f172a; /* Dark text for readability */
+    background: #1e293b; /* Match dark theme */
+    color: #e2e8f0;     /* Light text */
 }
 
 
@@ -101,6 +104,11 @@ body {
     }
 }
 
+#health-summary-card {
+    position: relative;
+    z-index: 1; /* Lower than the dropdown's z-index */
+}
+
 /* Toast Notification */
 .toast {
     position: fixed;
@@ -113,12 +121,12 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     transform: translateX(120%);
     transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    background: linear-gradient(90deg, #10b981, #059669);
+    background: linear-gradient(90deg, #10b981, #059669); /* Green gradient for success */
     border-left: 5px solid #6ee7b7;
 }
 
 .toast.error {
-    background: linear-gradient(90deg, #ef4444, #dc2626);
+    background: linear-gradient(90deg, #ef4444, #dc2626); /* Red gradient for error */
     border-left: 5px solid #f87171;
 }
 
@@ -133,18 +141,18 @@ body {
     font-weight: 600;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #9ca3af;
+    color: #9ca3af; /* Muted text */
     transition: all 0.3s ease;
     cursor: pointer;
 }
 
 .context-btn:hover {
-    background: rgba(20, 184, 166, 0.2);
+    background: rgba(20, 184, 166, 0.2); /* Teal hover */
     color: #14b8a6;
 }
 
 .context-btn.active {
-    background: #14b8a6;
+    background: #14b8a6; /* Active teal */
     color: white;
     box-shadow: 0 4px 15px rgba(20, 184, 166, 0.2);
 }
@@ -152,44 +160,120 @@ body {
 /* Chart Container - FIXES STRETCHING */
 .chart-container {
     position: relative;
-    height: 350px; /* Fixed height for all chart containers */
+    height: 350px; /* Default height, can be overridden by specific chart divs */
     width: 100%;
 }
 
 /* Autocomplete Dropdown */
 .autocomplete-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.75rem;
-    z-index: 50; 
-    max-height: 200px;
-    overflow-y: auto;
-    display: none; 
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  z-index: 5000; /* increase this value */
+  max-height: 200px;
+  overflow-y: auto;
+  display: none;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+  scrollbar-width: thin;
+  scrollbar-color: #475569 #1e293b;
 }
 
-.autocomplete-item {
-    padding: 0.75rem 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+/* Style for Chrome/Safari scrollbar */
+.autocomplete-dropdown::-webkit-scrollbar {
+  width: 6px;
 }
+.autocomplete-dropdown::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+.autocomplete-dropdown::-webkit-scrollbar-thumb {
+  background-color: #475569;
+  border-radius: 3px;
+}
+
+
+.autocomplete-item {
+  padding: 0.75rem 1rem; /* 12px top/bottom, 16px left/right */
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #cbd5e1; /* Lighter text */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Subtle separator */
+  white-space: nowrap;     /* Prevent text from wrapping */
+  overflow: hidden;        /* Hide text that overflows */
+  text-overflow: ellipsis; /* Show "..." for overflowed text */
+  display: block;          /* Ensure it takes full width */
+  height: calc(1.5rem + 1.5em);   /* Approximate height: padding + line-height */
+  line-height: 1.5em;      /* Adjust line-height to roughly match font size */
+}
+.autocomplete-item:last-child {
+    border-bottom: none; /* Remove border on last item */
+}
+
 .autocomplete-item:hover, .autocomplete-item.selected {
-    background-color: #334155;
+  background-color: #334155; /* Highlight on hover/selection */
+  color: #f1f5f9; /* Brighter text on highlight */
 }
 
 /* Map Marker Popups */
 .leaflet-popup-content-wrapper {
-    background: #1e293b;
-    color: #e2e8f0;
+    background: #1e293b; /* Dark background for popup */
+    color: #e2e8f0; /* Light text */
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
 }
 .leaflet-popup-content {
     margin: 10px;
+    font-size: 0.875rem; /* Slightly smaller font in popup */
 }
 .leaflet-popup-tip {
-    background: #1e293b;
+    background: #1e293b; /* Match popup background */
+}
+.leaflet-popup-content hr {
+    border-color: rgba(255, 255, 255, 0.1); /* Match border color */
+}
+
+/* Scrollbar styling (requires tailwindcss-scrollbar plugin or manual CSS) */
+.scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #4b5563 #1f2937; /* thumb color track color */
+}
+.scrollbar-thin::-webkit-scrollbar {
+    height: 6px; /* Height for horizontal scrollbar */
+    width: 6px;  /* Width for vertical scrollbar */
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+    background: #1f2937; /* Dark track */
+    border-radius: 3px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #4b5563; /* Gray thumb */
+    border-radius: 3px;
+    border: 1px solid #1f2937; /* Optional border */
+}
+
+.glass-card,
+#health-summary-card {
+  overflow: visible !important;
+  z-index: auto !important;
+}
+
+
+#suggestionsDropdownDashboard {
+  position: fixed !important;
+  top: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(10px);
+  width: 400px !important; /* adjust to match input width */
+  background: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  z-index: 999999 !important;
+  display: none;
+  overflow-y: auto;
+  max-height: 250px;
 }
